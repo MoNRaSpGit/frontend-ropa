@@ -1,0 +1,232 @@
+/* Detalle de producto (se abre al clickear una tarjeta) */
+.ropa-detail-box {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  /* "Se expande": entra con un pop de escala, para que se sienta que la
+     tarjeta crecio hasta convertirse en esto, sin la complejidad de
+     animar la transicion real entre la grilla y el modal. */
+  animation: ropa-detail-pop 0.16s ease-out;
+}
+
+@keyframes ropa-detail-pop {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.ropa-detail-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 245, 248, 0.6);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ropa-detail-media {
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(160deg, #fbd5e3, #f4b6cc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+}
+
+.ropa-detail-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ropa-detail-media-wordmark {
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
+  padding: 0 20px;
+  text-shadow: none;
+}
+
+.ropa-detail-body {
+  padding: 20px 22px 24px;
+}
+
+.ropa-detail-body h2 {
+  margin: 0 0 4px;
+  font-size: 21px;
+}
+
+.ropa-detail-description {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  margin: 10px 0 0;
+}
+
+/* Uno, otro o los dos precios -- pedido explicito (16/09/2026): "si no
+   le pongo el precio de perfil, no sale... si pongo los dos, salen los
+   dos". */
+.ropa-detail-prices {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 14px;
+}
+
+.ropa-detail-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+.ropa-detail-price-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.ropa-detail-price-suffix {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+/* Selector de perfil/cuenta -- pedido explicito (16/09/2026): "que el
+   cliente seleccione el que quiera... que no pueda agregar al carrito
+   si no selecciona el que quiere". */
+.ropa-detail-variant-picker {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.ropa-detail-variant-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  /* Punteado y en el color de acento mientras no esta elegida -- antes
+     era un borde gris solido, igual que cualquier caja no interactiva,
+     asi que no se notaba que hacia falta tocarla (pedido explicito
+     17/09/2026: "el boton me sale opaco... es raro"). */
+  border: 1px dashed var(--color-accent-dark);
+  background: rgba(255, 245, 248, 0.6);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.ropa-detail-variant-option:hover {
+  border-style: solid;
+  border-color: var(--color-accent-dark);
+}
+
+.ropa-detail-variant-option.is-selected {
+  border-style: solid;
+  border-color: var(--color-accent);
+  background: rgba(233, 138, 171, 0.12);
+}
+
+.ropa-detail-variant-amount {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+.ropa-detail-variant-hint {
+  padding: 0;
+  text-align: left;
+  font-size: 13px;
+  margin: 10px 0 0;
+}
+
+.ropa-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.ropa-detail-admin-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+.ropa-detail-admin-actions .ropa-button {
+  flex: 1;
+}
+
+.ropa-confirm-delete {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.ropa-confirm-delete p {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  margin: 0 0 12px;
+}
+
+.ropa-detail-add {
+  flex: 1;
+}
+
+.ropa-qty-stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-weight: 700;
+}
+
+.ropa-qty-stepper button {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(150, 70, 100, 0.08);
+  color: var(--color-text);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ropa-qty-stepper span {
+  min-width: 18px;
+  text-align: center;
+}

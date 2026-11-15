@@ -1,0 +1,12 @@
+{
+  "name": "Mi Tienda - Catalogo",
+  "short_name": "Mi Tienda",
+  "description": "Catalogo de ropa en tarjetas, consulta por WhatsApp.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff5f8",
+  "theme_color": "#ffd3e3",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

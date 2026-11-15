@@ -1,0 +1,294 @@
+/* La foto es el fondo de TODA la web, no solo de la franja de arriba --
+   pedido explicito (15/09/2026): "la imagen es el 100% de la web".
+   Fija a la ventana (no a la pagina) asi el contenido larga scrollea
+   por encima sin que la foto se corte ni se estire. Va SIEMPRE detras
+   de todo (z-index -1). */
+.ropa-page-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-position: center 22%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.ropa-page-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Arriba (detras del header) casi natural, y se mantiene asi hasta
+     justo DEBAJO del buscador -- ahi (--ropa-fade-start, medido en JS con
+     la posicion real del buscador, ver RopaHomePage.tsx) arranca la
+     transicion a mas oscuro, para que los productos hagan contraste.
+     Sigue siendo la MISMA foto de fondo, nunca un corte a color solido
+     -- pedido explicito (15/09/2026): "que se vea que hay imagen abajo,
+     que no sea negro". El fallback en vh es solo para el primer render,
+     antes de que el JS mida la posicion real. */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 245, 248, 0.4) 0,
+    rgba(255, 245, 248, 0.1) 90px,
+    rgba(255, 245, 248, 0.1) calc(var(--ropa-fade-start, 30vh) - 10px),
+    rgba(255, 245, 248, 0.72) calc(var(--ropa-fade-start, 30vh) + 130px),
+    rgba(255, 245, 248, 0.8) calc(var(--ropa-fade-start, 30vh) + 340px)
+  );
+}
+
+/* Hero: ya no tiene imagen propia (la pone .ropa-page-backdrop, fija
+   detras de toda la pagina) -- esto solo reserva el alto de la franja
+   de arriba para que el header tenga aire antes del buscador. */
+.ropa-hero {
+  position: relative;
+  min-height: 24vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Barra propia (semi-transparente + blur) para que el header se note
+   bien SIEMPRE, sea cual sea la foto de fondo -- pedido 15/09/2026: "no
+   se nota bien el encabezado". */
+.ropa-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Mas bajita (10px, empezo en 16px) -- pedido explicito (17/09/2026):
+     "bajamos de un lado y le subimos al otro" + "un poquito mas". Lo
+     que se achica aca se suma al alto del carrusel (ver
+     .ropa-carousel-viewport en carousel.css). */
+  padding: 10px 28px;
+  background: rgba(255, 245, 248, 0.45);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(150, 70, 100, 0.08);
+  box-shadow: 0 4px 18px rgba(150, 70, 100, 0.18);
+}
+
+.ropa-brand-logo {
+  /* Idem: mas chico (empezo en 72px) para bajar el alto de la cabecera
+     -- ver comentario en .ropa-header. */
+  height: 48px;
+  width: auto;
+  display: block;
+}
+
+.ropa-brand-logo-button {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.ropa-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.ropa-nav-link {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 14.5px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.ropa-nav-link:hover {
+  color: var(--color-text);
+  background: rgba(150, 70, 100, 0.06);
+}
+
+.ropa-nav-link.is-active {
+  color: var(--color-accent);
+}
+
+/* Pestaña de WhatsApp (14/10/2026, pedido explicito): reemplaza a
+   "Blog"/"Contacto", en el lugar de la burbuja flotante que se saco. Se
+   distingue del resto con el verde de la marca, para que se note que
+   abre un chat externo y no es una seccion mas del sitio. */
+.ropa-nav-link--whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #25d366;
+  text-decoration: none;
+}
+
+.ropa-nav-link--whatsapp:hover {
+  color: #25d366;
+  background: rgba(37, 211, 102, 0.12);
+}
+
+/* Desplegable "Caracteristicas" del header -- reemplaza a los chips de
+   genero que antes vivian al lado del buscador (pedido explicito
+   15/09/2026). */
+.ropa-features-dropdown {
+  position: relative;
+}
+
+.ropa-features-caret {
+  margin-left: 4px;
+  vertical-align: -1px;
+}
+
+.ropa-features-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: rgba(255, 245, 248, 0.96);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 28px rgba(150, 70, 100, 0.18);
+  z-index: 5;
+}
+
+.ropa-features-panel .ropa-chip {
+  width: 100%;
+  text-align: left;
+}
+
+@media (max-width: 640px) {
+  .ropa-features-panel {
+    left: auto;
+    right: 0;
+  }
+}
+
+.ropa-header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ropa-session {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ropa-session-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.ropa-cart-button {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: rgba(255, 245, 248, 0.7);
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.ropa-cart-button:hover {
+  border-color: var(--color-accent-dark);
+}
+
+.ropa-cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #141414;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+@media (max-width: 640px) {
+  .ropa-nav {
+    display: none;
+  }
+}
+
+/* Reemplaza al boton "Ingresar" (sacado del header, pedido explicito
+   15/09/2026: ahora se entra apretando el logo) -- SOLO en celular,
+   para que el visitante tenga un acceso directo a WhatsApp ahi mismo
+   sin que moleste el resto del header. En PC, sin sesion, el
+   header-right queda unicamente con el carrito. */
+.ropa-header-whatsapp {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #06210f;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .ropa-header-whatsapp {
+    display: flex;
+  }
+}
+
+/* Titulo + bajada arriba del buscador, dentro del hero -- pedido
+   explicito (15/09/2026). */
+.ropa-hero-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.ropa-hero-title {
+  margin: 0;
+  padding: 0 20px;
+  text-align: center;
+  font-size: clamp(24px, 4vw, 38px);
+  font-weight: 800;
+  color: var(--color-text);
+  text-shadow: 0 2px 12px rgba(255, 255, 255, 0.8);
+}
+
+.ropa-hero-subtitle {
+  margin: 0;
+  padding: 0 20px;
+  text-align: center;
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--color-text);
+  text-shadow: 0 1px 10px rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 480px) {
+  .ropa-header {
+    padding: 10px 18px;
+  }
+}
+
+/* Marca de texto provisoria (se cambia por el logo de la clienta). */
+.ropa-brand-text {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-accent-dark);
+}
+
+.ropa-brand-logo-button .ropa-brand-text {
+  cursor: pointer;
+}

@@ -1,0 +1,21 @@
+/* Separado en archivos por seccion dentro de ./ropa/ (17/09/2026, pedido
+   explicito: "esta bien estructurado carpetas, css y demas, todo
+   separado?... si no esta, hacelo") -- mismo criterio que ya se usaba
+   en frontend-joker (ver src/styles/global.css de ese proyecto). Cada
+   archivo agrupa una parte de la pantalla; el orden de los @import no
+   importa para el cascade porque cada selector es una clase propia
+   (nunca dos archivos definen la misma clase con reglas distintas). */
+
+@import "./ropa/base.css";
+@import "./ropa/header.css";
+@import "./ropa/search.css";
+@import "./ropa/admin.css";
+@import "./ropa/clients.css";
+@import "./ropa/carousel.css";
+@import "./ropa/cards.css";
+@import "./ropa/buttons.css";
+@import "./ropa/modals.css";
+@import "./ropa/product-detail.css";
+@import "./ropa/cart.css";
+@import "./ropa/minicart.css";
+@import "./ropa/footer.css";

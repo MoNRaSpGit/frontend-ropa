@@ -1,0 +1,192 @@
+/* Pestaña "Carrusel" del admin (15/09/2026) -- grilla de miniaturas de
+   las fotos de fondo, cada una con su boton de borrar. */
+.ropa-carousel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.ropa-carousel-item {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+}
+
+.ropa-carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ropa-carousel-item-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 245, 248, 0.7);
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ropa-carousel-item-confirm {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(255, 245, 248, 0.85);
+  text-align: center;
+  font-size: 13px;
+}
+
+/* Carrusel clasico de imagenes destacadas (15/09/2026) -- vidriera
+   horizontal, propia y separada de la foto de fondo de la pagina (esa
+   sigue siendo siempre la original). Las fotos las carga el admin desde
+   su pestaña "Carrusel" (ver AdminCarouselPage.tsx). */
+.ropa-carousel-wrap {
+  padding: 0;
+  width: 100%;
+}
+
+.ropa-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ropa-carousel-viewport {
+  position: relative;
+  /* Alto FIJO (no aspect-ratio) -- pedido explicito (15/09/2026): "de
+     extremo a extremo... pero finito". Al ocupar el 100% del ancho de
+     la pagina (no solo del contenido central), un aspect-ratio haria
+     que la banda creciera de alto en pantallas anchas -- con un alto
+     fijo se mantiene finita sin importar el ancho de la ventana.
+     Pedido explicito (17/09/2026): "subo imagenes de 1920x280 y algunas
+     entran y otras quedan cortadas". Con object-fit: cover, cualquier
+     alto fijo recorta arriba/abajo o a los costados segun que tan ancha
+     este la ventana en ese momento -- 220px recortaba de mas en la
+     mayoria de los anchos. Subir a 280px (el alto real de la imagen que
+     esta subiendo) hace que en una pantalla de 1920px de ancho la
+     imagen entre COMPLETA, sin recorte, y en el resto de los anchos
+     recorta bastante menos que antes.
+     Pedido explicito (17/09/2026): "bajamos de un lado (cabecera) y le
+     subimos al otro (carrusel)" + "un poquito mas" -- se le suma lo
+     mismo que se le sacó a .ropa-header en header.css (16px->10px de
+     padding x2, mas 72px->48px de logo = 36px en total), asi el alto
+     combinado de cabecera+carrusel no cambia. */
+  /* Pedido explicito (19/09/2026): "en full screen se corta la altura
+     (media cabeza), en 50% y celular se ve impecable... volvamos al alto
+     fijo pero que la imagen entre toda". Punto de vuelta atras: tag git
+     punto-carrusel-alto-fijo-316 (alto fijo puro, sin esta formula).
+     El alto es el MAYOR entre 316px (el de siempre: gordito, como se ve
+     bien en ventana chica) y el que necesita una imagen 1920x271 para
+     entrar entera a lo ancho de la ventana (100vw * 271/1920). Hasta
+     ~2240px de ancho manda el 316px de siempre (nada cambia); en
+     monitores mas anchos el recuadro crece lo justo para que cover ya no
+     tenga que cortar arriba/abajo. Para agrandar el carrusel en general,
+     subir el 316px de --ropa-carousel-min-height. Celular: alto fijo abajo. */
+  --ropa-carousel-min-height: 316px;
+  height: max(var(--ropa-carousel-min-height), calc(100vw * 271 / 1920));
+  overflow: hidden;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+}
+
+.ropa-carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s ease;
+}
+
+.ropa-carousel-slide {
+  flex: 0 0 100%;
+  height: 100%;
+}
+
+.ropa-carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ropa-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 245, 248, 0.55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ropa-carousel-arrow:hover {
+  background: rgba(255, 245, 248, 0.8);
+}
+
+.ropa-carousel-arrow--prev {
+  left: 12px;
+}
+
+.ropa-carousel-arrow--next {
+  right: 12px;
+}
+
+.ropa-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ropa-carousel-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  border: none;
+  background: var(--color-border);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.ropa-carousel-dot.is-active {
+  background: var(--color-accent);
+  transform: scale(1.25);
+}
+
+/* Celular (19/09/2026): con las imagenes ya aplastadas a 1920x271 (7:1), un
+   alto fijo de 180px obligaba a agrandarlas tanto que solo se veia el ~30%
+   del centro ("se ve horrible"). Ahora el alto acompania al ancho de la
+   pantalla (la imagen entera mediria ~55px a 390px de ancho) pero con un
+   piso de 80px para que no quede una tirita: se ve ~70% del ancho, con
+   todo el alto. Punto de vuelta atras: tag punto-carrusel-hibrido-316.
+   Para mas alto en celular, subir --ropa-carousel-mobile-min-height. */
+@media (max-width: 640px) {
+  .ropa-carousel-viewport {
+    --ropa-carousel-mobile-min-height: 80px;
+    height: max(var(--ropa-carousel-mobile-min-height), calc(100vw * 271 / 1920));
+  }
+}

@@ -1,0 +1,184 @@
+/* Pantalla "Productos" del admin (15/09/2026) -- separada del catalogo
+   publico, mismo header/fondo pero contenido propio. */
+.ropa-admin-main {
+  flex: 1;
+  padding: 24px 24px 40px;
+  max-width: 900px;
+  width: 100%;
+  margin: 24px auto 40px;
+  /* Panel propio con fondo oscuro -- pedido explicito (15/09/2026): "la
+     imagen de fondo es oscura y quedo medio clarito, algo con mas
+     contraste". Antes esta pantalla dependia de lo clara/oscura que
+     estuviera esa parte de la foto de fondo; con su propio fondo
+     siempre se lee bien, sea cual sea la foto. */
+  background: rgba(255, 245, 248, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.ropa-admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ropa-admin-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.ropa-admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ropa-admin-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: rgba(255, 245, 248, 0.9);
+}
+
+/* Orden manual del catalogo (16/09/2026). */
+.ropa-admin-position-input {
+  flex-shrink: 0;
+  width: 44px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-accent);
+  font-weight: 800;
+  text-align: center;
+  font-size: 14px;
+}
+
+.ropa-admin-position-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.ropa-admin-row-media {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ropa-admin-row-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ropa-admin-row-media-empty {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 0 4px;
+}
+
+.ropa-admin-row-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ropa-admin-row-name {
+  font-weight: 700;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ropa-admin-row-meta {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.ropa-admin-row-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ropa-admin-confirm-text {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-right: 2px;
+}
+
+@media (max-width: 560px) {
+  .ropa-admin-row {
+    flex-wrap: wrap;
+  }
+
+  .ropa-admin-row-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* Codigo de descuento (28/09/2026): formulario simple, ancho acotado. */
+.ropa-discount-form {
+  max-width: 420px;
+  margin-top: 10px;
+}
+
+/* Toggle grande activado/desactivado (28/09/2026, pedido explicito): en
+   vez de un checkbox chico, un boton grande que cambia de color. */
+.ropa-toggle-button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.ropa-toggle-button--on {
+  background: #1f8a3d;
+  border-color: #17692f;
+  color: #fff;
+}
+
+.ropa-toggle-button--on:hover {
+  background: #1a7434;
+}
+
+.ropa-toggle-button--off {
+  background: #c0392b;
+  border-color: #96291d;
+  color: #fff;
+}
+
+.ropa-toggle-button--off:hover {
+  background: #a5301f;
+}
+
+.ropa-toggle-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -1,0 +1,68 @@
+:root {
+  /* Rosa pastel (pedido: es para una mujer). */
+  --color-bg: #fff5f8;
+  --color-bg-elevated: #ffffff;
+  --color-card: #ffffff;
+  --color-card-hover: #fff0f5;
+  --color-border: #f3d3df;
+  --color-text: #4a2c38;
+  --color-text-muted: #9b7a88;
+  --color-accent: #e98aab;
+  --color-accent-dark: #c9648a;
+  --color-celeste: #c9648a;
+  --color-celeste-dark: #a84c70;
+  --color-danger: #d6455d;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}
+
+.ropa-shell {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.ropa-main {
+  flex: 1;
+  padding: 0 28px 40px;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ropa-hint {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 40px 0;
+}
+
+.ropa-error {
+  color: var(--color-danger);
+}
+
+.ropa-error--center {
+  text-align: center;
+  padding: 20px 0;
+}
+
+@media (max-width: 480px) {
+  .ropa-main {
+    padding: 0 16px 32px;
+  }
+}

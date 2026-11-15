@@ -1,0 +1,48 @@
+/* Pie de pagina (14/10/2026, tercera vuelta, pedido explicito): una sola
+   linea -- "Desarrollado por" + logo + WhatsApp a continuacion, todo
+   junto, alineado a la derecha. Sin copyright, sin chip con fondo. */
+.ropa-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding: 14px 20px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+}
+
+.ropa-footer-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 12.5px;
+  transition: color 0.15s ease;
+}
+
+.ropa-footer-credit:hover {
+  color: var(--color-text);
+}
+
+.ropa-footer-logo {
+  display: block;
+  height: 20px;
+  width: auto;
+  border-radius: 4px;
+}
+
+.ropa-footer-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--color-border);
+}
+
+.ropa-footer-whatsapp-icon {
+  color: #25d366;
+  flex-shrink: 0;
+}
+
+.ropa-footer-credit span:last-child {
+  font-weight: 700;
+  color: var(--color-text);
+}
