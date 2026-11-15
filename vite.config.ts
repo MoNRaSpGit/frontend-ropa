@@ -37,10 +37,10 @@ export default defineConfig(({ mode }) => {
   );
 
   return {
-    // Pedido explicito (18/09/2026): dominio propio www.ropadigital.net. Con
+
     // dominio propio el sitio vive en la raiz (no en /frontend-ropa/) -- ver
     // public/CNAME para la config de GitHub Pages del lado del repo.
-    base: "/",
+    base: "/frontend-ropa/",
     plugins: [
       react(),
       {
