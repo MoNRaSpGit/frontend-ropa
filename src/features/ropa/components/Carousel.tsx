@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-export type CarouselSlide = { key: string | number; src: string };
+// src = imagen de celular (la de siempre). srcDesktop (opcional, 16/11/2026) =
+// version para PC con el contenido en la zona central, que no se corta en
+// ningun ancho de ventana. Sin srcDesktop, la PC usa src como antes.
+export type CarouselSlide = { key: string | number; src: string; srcDesktop?: string };
 
 type CarouselProps = {
   images: CarouselSlide[];
@@ -39,7 +42,11 @@ export function Carousel({ images }: CarouselProps) {
         <div className="ropa-carousel-track" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
           {images.map((image) => (
             <div className="ropa-carousel-slide" key={image.key}>
-              <img src={image.src} alt="" loading="lazy" />
+              <picture>
+                {/* Mismo corte que el @media del celular en carousel.css (640px). */}
+                {image.srcDesktop ? <source media="(min-width: 641px)" srcSet={image.srcDesktop} /> : null}
+                <img src={image.src} alt="" loading="lazy" />
+              </picture>
             </div>
           ))}
         </div>

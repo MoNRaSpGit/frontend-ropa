@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 300" width="1920" height="300" font-family="Georgia, 'Times New Roman', serif">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd1e1"/><stop offset="1" stop-color="#f7a8c4"/></linearGradient></defs>
+<rect width="1920" height="300" fill="url(#g)"/>
+<circle cx="1540" cy="150" r="190" fill="#fff" fill-opacity=".28"/><circle cx="1800" cy="30" r="110" fill="#fff" fill-opacity=".22"/><circle cx="60" cy="290" r="150" fill="#fff" fill-opacity=".2"/>
+<g transform="translate(-220 0)"><path d="M1520 40c10 20 25 30 40 30s30-10 40-30l36 20-20 56-26-10 20 130h-100l20-130-26 10-20-56z" fill="#fff" fill-opacity=".88"/><path d="M1490 190h140l30 90h-200z" fill="#fff" fill-opacity=".6"/></g>
+<g transform="translate(300 0)" fill="#5a2a40">
+<rect x="200" y="42" width="250" height="34" rx="17" fill="#fff" fill-opacity=".8"/>
+<text x="325" y="65" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3" text-anchor="middle">NUEVA TEMPORADA</text>
+<text x="200" y="155" font-size="84" font-weight="700">Primavera <tspan font-style="italic" font-weight="400">en rosa</tspan></text>
+<text x="203" y="200" font-family="Arial, sans-serif" font-size="26">Vestidos, remeras y básicos que te encantan</text>
+<rect x="200" y="222" width="230" height="46" rx="23" fill="#5a2a40"/>
+<text x="315" y="252" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#fff" text-anchor="middle">Ver colección</text>
+</g>
+<rect x="1150" y="12" width="270" height="36" rx="10" fill="#000" fill-opacity=".55"/>
+<text x="1285" y="37" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#fff" text-anchor="middle">PC · 1920 × 300 px</text>
+</svg>

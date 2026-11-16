@@ -73,9 +73,10 @@ export function AuthModal({ onCancelar, onIngresado }: AuthModalProps) {
           ) : null}
 
           <label className="ropa-field">
-            <span>Email</span>
+            <span>{modo === "login" ? "Usuario o email" : "Email"}</span>
             <input
-              type="email"
+              type={modo === "login" ? "text" : "email"}
+              autoCapitalize="none"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               autoFocus={modo === "login"}

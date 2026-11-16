@@ -69,14 +69,19 @@ export async function resizeImageFile(file: File): Promise<string> {
 
 // Carrusel: medida unica y fija (la que se le dice al admin y la misma de la
 // caja del carrusel), suba lo que suba.
-export const CAROUSEL_WIDTH = 1920;
-export const CAROUSEL_HEIGHT = 300;
+// (16/11/2026) Dos medidas: celular 1200x400 = la forma del recuadro en el
+// celular (se ve entera); PC 1920x300 = banda fina, lo importante al centro.
+export const CAROUSEL_SIZES = {
+  mobile: { width: 1200, height: 400 },
+  desktop: { width: 1920, height: 300 }
+} as const;
 const CAROUSEL_JPEG_QUALITY = 0.82;
 
-export async function resizeBackgroundImageFile(file: File): Promise<string> {
+export async function resizeCarouselImageFile(file: File, variant: keyof typeof CAROUSEL_SIZES): Promise<string> {
   const originalDataUri = await readFileAsDataUri(file);
   const image = await loadImage(originalDataUri);
-  return composeOnCanvas(image, CAROUSEL_WIDTH, CAROUSEL_HEIGHT, CAROUSEL_JPEG_QUALITY) ?? originalDataUri;
+  const { width, height } = CAROUSEL_SIZES[variant];
+  return composeOnCanvas(image, width, height, CAROUSEL_JPEG_QUALITY) ?? originalDataUri;
 }
 
 function readFileAsDataUri(file: File): Promise<string> {

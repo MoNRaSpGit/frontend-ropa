@@ -4,6 +4,7 @@ import {
   deleteClient,
   deleteProduct,
   getDiscountConfig,
+  getCarouselDesktopImageSrc,
   getCarouselImageSrc,
   listCarouselImages,
   listClients,
@@ -32,7 +33,8 @@ const SAMPLE_CARD_GRADIENTS = [
 
 const DEFAULT_CAROUSEL_SLIDES: CarouselSlide[] = [1, 2, 3].map((n) => ({
   key: `demo-${n}`,
-  src: `${import.meta.env.BASE_URL}carrusel/anuncio-${n}.svg`
+  src: `${import.meta.env.BASE_URL}carrusel/anuncio-${n}.svg`,
+  srcDesktop: `${import.meta.env.BASE_URL}carrusel/anuncio-${n}-pc.svg`
 }));
 import { CartDrawer } from "./components/CartDrawer";
 import { ClientFormModal } from "./components/ClientFormModal";
@@ -150,6 +152,7 @@ export function RopaHomePage() {
       setProducts(items);
       setError(null);
     } catch (fetchError) {
+      console.error("[ropa] Error al cargar productos:", fetchError);
       setError(fetchError instanceof Error ? fetchError.message : "No se pudo cargar el catálogo.");
     } finally {
       setIsLoading(false);
@@ -167,7 +170,11 @@ export function RopaHomePage() {
   // se muestran 3 anuncios de ejemplo; apenas suba la primera, la reemplaza.
   const carouselSlides: CarouselSlide[] =
     carouselImages.length > 0 && !carouselError
-      ? carouselImages.map((image) => ({ key: image.id, src: getCarouselImageSrc(image) }))
+      ? carouselImages.map((image) => ({
+          key: image.id,
+          src: getCarouselImageSrc(image),
+          srcDesktop: getCarouselDesktopImageSrc(image) ?? undefined
+        }))
       : DEFAULT_CAROUSEL_SLIDES;
 
   async function refreshCarousel() {
@@ -365,6 +372,7 @@ export function RopaHomePage() {
           isLoading={isCarouselLoading}
           error={carouselError}
           onAgregada={(image) => setCarouselImages((current) => [...current, image])}
+          onActualizada={(image) => setCarouselImages((current) => current.map((item) => (item.id === image.id ? image : item)))}
           onEliminada={(imageId) => setCarouselImages((current) => current.filter((item) => item.id !== imageId))}
         />
       ) : view === "clientes" && isAdmin && session ? (
@@ -387,7 +395,6 @@ export function RopaHomePage() {
           <div className="ropa-search-wrap">
             <div className="ropa-hero-heading">
               <h1 className="ropa-hero-title">¿Qué te querés probar hoy?</h1>
-              <p className="ropa-hero-subtitle">Buscá tu próxima prenda favorita y consultala por WhatsApp.</p>
             </div>
 
             <form className="ropa-search-row" ref={searchRowRef} onSubmit={(event) => event.preventDefault()}>
@@ -440,7 +447,15 @@ export function RopaHomePage() {
           </div>
 
           <main className="ropa-main">
-            {error ? <p className="ropa-error ropa-error--center">{error}</p> : null}
+            {/* (16/11/2026) El error tecnico ("Cannot GET ...") lo ve SOLO el
+                admin (y queda en la consola); el cliente ve un mensaje amable. */}
+            {error ? (
+              isAdmin ? (
+                <p className="ropa-error ropa-error--center">Error al cargar productos: {error}</p>
+              ) : (
+                <p className="ropa-hint">Todavía no hay productos cargados.</p>
+              )
+            ) : null}
 
             {!error && isLoading ? <p className="ropa-hint">Cargando...</p> : null}
 

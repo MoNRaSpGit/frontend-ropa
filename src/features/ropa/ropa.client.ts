@@ -148,6 +148,22 @@ export function getCarouselImageSrc(image: Pick<RopaCarouselImage, "id" | "versi
   return buildUrl(`/ropa/carousel/${image.id}/image?v=${image.version}`);
 }
 
+// Version PC (16/11/2026); null si el slide no tiene.
+export function getCarouselDesktopImageSrc(image: Pick<RopaCarouselImage, "id" | "desktopVersion">): string | null {
+  if (!image.desktopVersion) return null;
+  return buildUrl(`/ropa/carousel/${image.id}/image?variant=desktop&v=${image.desktopVersion}`);
+}
+
+export async function setCarouselDesktopImage(token: string, imageId: number, dataUri: string) {
+  const response = await fetch(buildUrl(`/ropa/carousel/${imageId}/desktop`), {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...authHeaders(token) },
+    body: JSON.stringify({ dataUri })
+  });
+  const data = await readJson<{ item: RopaCarouselImage }>(response);
+  return data.item;
+}
+
 export async function listCarouselImages() {
   const response = await fetch(buildUrl("/ropa/carousel"));
   const data = await readJson<{ items: RopaCarouselImage[] }>(response);
