@@ -470,7 +470,7 @@ export function RopaHomePage() {
             ) : null}
 
             {!isLoading && visibleProducts.length === 0 && !query.trim() && !selectedGenre ? (
-              <div className="ropa-grid" aria-hidden="true">
+              <div className="ropa-grid ropa-grid--samples" aria-hidden="true">
                 {SAMPLE_CARD_GRADIENTS.map((gradient, index) => (
                   <div className="ropa-card ropa-card--sample" key={index}>
                     <div className="ropa-card-media" style={{ background: gradient }}>

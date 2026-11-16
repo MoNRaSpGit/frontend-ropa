@@ -9,6 +9,16 @@
 
 /* Cuadraditos de ejemplo: muestran donde iria la foto de cada producto
    mientras el catalogo todavia esta vacio. */
+/* (16/11/2026) En PC quedaban 7 + 1: los 8 de ejemplo van 4 y 4, centrados
+   y del mismo tamaño de siempre. Celular sin cambios. */
+@media (min-width: 641px) {
+  .ropa-grid--samples {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 760px;
+    margin: 0 auto;
+  }
+}
+
 .ropa-card--sample {
   cursor: default;
   pointer-events: none;
