@@ -394,7 +394,7 @@ export function RopaHomePage() {
 
           <div className="ropa-search-wrap">
             <div className="ropa-hero-heading">
-              <h1 className="ropa-hero-title">¿Qué te querés probar hoy?</h1>
+              <h1 className="ropa-hero-title">Encontrá tu próximo detalle favorito</h1>
             </div>
 
             <form className="ropa-search-row" ref={searchRowRef} onSubmit={(event) => event.preventDefault()}>
@@ -408,7 +408,7 @@ export function RopaHomePage() {
               <input
                 type="text"
                 className="ropa-search-input"
-                placeholder="Buscar prendas"
+                placeholder="Buscar productos"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 autoFocus
