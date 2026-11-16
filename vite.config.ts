@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
 
     // dominio propio el sitio vive en la raiz (no en /frontend-ropa/) -- ver
     // public/CNAME para la config de GitHub Pages del lado del repo.
-    base: "/frontend-ropa/",
+    base: "/",
     plugins: [
       react(),
       {
