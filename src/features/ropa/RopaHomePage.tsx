@@ -19,6 +19,17 @@ import { AdminProductsPage } from "./components/AdminProductsPage";
 import { AuthModal } from "./components/AuthModal";
 import { Carousel, type CarouselSlide } from "./components/Carousel";
 
+const SAMPLE_CARD_GRADIENTS = [
+  "linear-gradient(160deg, #ffd1e1, #f7a8c4)",
+  "linear-gradient(160deg, #e9d5ff, #cfa9f0)",
+  "linear-gradient(160deg, #ffe0d1, #f8b9a0)",
+  "linear-gradient(160deg, #d5e8ff, #a9c9f0)",
+  "linear-gradient(160deg, #d8f5e3, #a9e0c0)",
+  "linear-gradient(160deg, #fff0c9, #f5d98a)",
+  "linear-gradient(160deg, #ffd9e6, #f4b6cc)",
+  "linear-gradient(160deg, #f6d6f5, #e0a8de)"
+];
+
 const DEFAULT_CAROUSEL_SLIDES: CarouselSlide[] = [1, 2, 3].map((n) => ({
   key: `demo-${n}`,
   src: `${import.meta.env.BASE_URL}carrusel/anuncio-${n}.svg`
@@ -441,6 +452,24 @@ export function RopaHomePage() {
                     ? "No hay productos cargados en esta categoría todavía."
                     : "Todavía no hay productos cargados."}
               </p>
+            ) : null}
+
+            {!isLoading && visibleProducts.length === 0 && !query.trim() && !selectedGenre ? (
+              <div className="ropa-grid" aria-hidden="true">
+                {SAMPLE_CARD_GRADIENTS.map((gradient, index) => (
+                  <div className="ropa-card ropa-card--sample" key={index}>
+                    <div className="ropa-card-media" style={{ background: gradient }}>
+                      <span className="ropa-card-sample-tag">Ejemplo</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 7a2 2 0 1 0-2-2" />
+                        <path d="M12 7v2l9 5.5a1.2 1.2 0 0 1-.6 2.2H3.6A1.2 1.2 0 0 1 3 14.5L12 9" />
+                      </svg>
+                      <span>Foto del producto</span>
+                      <span className="ropa-card-sample-size">640 × 640 px</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : null}
 
             <div className="ropa-grid">

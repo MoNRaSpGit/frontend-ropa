@@ -7,6 +7,49 @@
   gap: 16px;
 }
 
+/* Cuadraditos de ejemplo: muestran donde iria la foto de cada producto
+   mientras el catalogo todavia esta vacio. */
+.ropa-card--sample {
+  cursor: default;
+  pointer-events: none;
+}
+
+.ropa-card--sample .ropa-card-media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-style: dashed;
+  color: #7a3a55;
+  text-align: center;
+}
+
+.ropa-card--sample svg {
+  width: 42%;
+  height: auto;
+  opacity: 0.75;
+}
+
+.ropa-card-sample-size {
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.ropa-card-sample-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0.7;
+}
+
 .ropa-card {
   display: block;
   background: none;

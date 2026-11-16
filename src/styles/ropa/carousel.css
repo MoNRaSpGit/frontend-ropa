@@ -8,7 +8,7 @@
 
 .ropa-carousel-item {
   position: relative;
-  aspect-ratio: 1920 / 880;
+  aspect-ratio: 1920 / 300;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -100,13 +100,12 @@
      monitores mas anchos el recuadro crece lo justo para que cover ya no
      tenga que cortar arriba/abajo. Para agrandar el carrusel en general,
      subir el 316px de --ropa-carousel-min-height. Celular: alto fijo abajo. */
-  /* Medida FIJA 1920 x 880 (misma que se compone al subir): la caja siempre
-     tiene esa proporcion y se centra con un maximo de ancho, asi en
-     escritorio no queda gigante ni recortada, y en celular entra completa. */
-  aspect-ratio: 1920 / 880;
-  width: 100%;
-  max-width: 1280px;
-  margin-inline: auto;
+  /* Banda FINA de lado a lado, como la de QQ Digital. Medida de las imagenes:
+     1920 x 300 (la misma que se compone al subir). El alto acompana al ancho
+     de la pantalla (la imagen entra entera) pero con un piso para que en
+     pantallas chicas no quede una tirita: ahi se ve el centro de la imagen. */
+  --ropa-carousel-min-height: 200px;
+  height: max(var(--ropa-carousel-min-height), calc(100vw * 300 / 1920));
   overflow: hidden;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
@@ -191,6 +190,12 @@
    Para mas alto en celular, subir --ropa-carousel-mobile-min-height. */
 @media (max-width: 640px) {
   .ropa-carousel-viewport {
-    border-radius: 0;
+    --ropa-carousel-min-height: 130px;
+  }
+
+  /* En celular solo entra una parte de lo ancho: se ancla a la izquierda
+     (donde va el titular) en vez de al centro. */
+  .ropa-carousel-slide img {
+    object-position: 15% center;
   }
 }

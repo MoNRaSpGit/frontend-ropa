@@ -70,7 +70,7 @@ export async function resizeImageFile(file: File): Promise<string> {
 // Carrusel: medida unica y fija (la que se le dice al admin y la misma de la
 // caja del carrusel), suba lo que suba.
 export const CAROUSEL_WIDTH = 1920;
-export const CAROUSEL_HEIGHT = 880;
+export const CAROUSEL_HEIGHT = 300;
 const CAROUSEL_JPEG_QUALITY = 0.82;
 
 export async function resizeBackgroundImageFile(file: File): Promise<string> {
