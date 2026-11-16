@@ -55,6 +55,19 @@
   white-space: nowrap;
 }
 
+/* (16/11/2026) Con las categorias nuevas (nombres largos) la fila de 820px
+   cortaba "Regalos y fechas especiales" a la mitad. En PC: mas ancha y, si
+   igual no entra, baja a otra linea en vez de cortarse. Celular: sin cambios
+   (sigue deslizandose de costado). */
+@media (min-width: 641px) {
+  .ropa-genre-row {
+    max-width: 1100px;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: visible;
+  }
+}
+
 /* Pill unica: lupa "de adorno" a la izquierda (con su rayita
    divisoria) + input + boton lupa celeste a la derecha, los tres
    adentro del mismo contenedor -- pedido explicito (15/09/2026): "la
