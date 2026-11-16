@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { getProductImageSrc } from "../ropa.client";
 import { getProductSizes, getUnitPrice, type RopaSize } from "../ropa.pricing";
+import { getCategoryLabel } from "../ropa.genres";
 import { getProductTheme } from "../ropa.theme";
 import type { RopaProduct } from "../ropa.types";
 
@@ -53,7 +54,7 @@ export function ProductDetailModal({ product, isAdmin, onCerrar, onAgregarAlCarr
 
         <div className="ropa-detail-body">
           <h2>{product.name}</h2>
-          {product.category ? <span className="ropa-card-category">{product.category}</span> : null}
+          {product.category ? <span className="ropa-card-category">{getCategoryLabel(product.category)}</span> : null}
           {product.description ? <p className="ropa-detail-description">{product.description}</p> : null}
 
           <div className="ropa-detail-prices">

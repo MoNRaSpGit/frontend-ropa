@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getProductImageSrc } from "../ropa.client";
+import { getCategoryLabel } from "../ropa.genres";
 import { getUnitPrice } from "../ropa.pricing";
 import type { RopaProduct } from "../ropa.types";
 
@@ -93,7 +94,7 @@ export function AdminProductsPage({ products, isLoading, error, onNuevo, onEdita
               <div className="ropa-admin-row-info">
                 <span className="ropa-admin-row-name">{product.name}</span>
                 <span className="ropa-admin-row-meta">
-                  {product.category || "Sin categoría"} ·{" "}
+                  {getCategoryLabel(product.category) || "Sin categoría"} ·{" "}
                   ${getUnitPrice(product).toFixed(0)}{product.sizes.length ? ` · Talles ${product.sizes.join(", ")}` : ""}
                 </span>
               </div>

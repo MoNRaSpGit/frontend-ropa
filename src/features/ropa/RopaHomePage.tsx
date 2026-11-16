@@ -44,7 +44,7 @@ import { ProductCard } from "./components/ProductCard";
 import { ProductDetailModal } from "./components/ProductDetailModal";
 import { ProductFormModal } from "./components/ProductFormModal";
 import { Footer } from "./components/Footer";
-import { getGenreForCategory, ROPA_GENRES, type RopaGenreKey } from "./ropa.genres";
+import { getGenreForCategory, getSubcategoryForCategory, ROPA_GENRES, type RopaGenreKey } from "./ropa.genres";
 import { type RopaSize } from "./ropa.pricing";
 import { clearSession, loadSession, saveSession, type RopaSession } from "./ropa.session";
 import { setTrackingEnabled, trackEvent } from "./ropa.track";
@@ -66,6 +66,11 @@ export function RopaHomePage() {
   const [view, setView] = useState<"catalogo" | "productos" | "carrusel" | "clientes" | "codigo">("catalogo");
   const [query, setQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState<RopaGenreKey | null>(null);
+  // Subcategoria (16/11/2026): se elige despues de la categoria; al cambiar
+  // de categoria vuelve a "Todas".
+  const [selectedSub, setSelectedSub] = useState<string | null>(null);
+  useEffect(() => setSelectedSub(null), [selectedGenre]);
+  const selectedGenreInfo = ROPA_GENRES.find((genre) => genre.key === selectedGenre) ?? null;
   const [products, setProducts] = useState<RopaProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -142,7 +147,11 @@ export function RopaHomePage() {
   // buscador -- no pega al backend de nuevo, se resuelve en el momento a
   // partir de la categoria de cada producto (ver ropa.genres.ts).
   const visibleProducts = selectedGenre
-    ? products.filter((product) => getGenreForCategory(product.category) === selectedGenre)
+    ? products.filter(
+        (product) =>
+          getGenreForCategory(product.category) === selectedGenre &&
+          (selectedSub === null || getSubcategoryForCategory(product.category) === selectedSub)
+      )
     : products;
 
   async function refresh(search?: string) {
@@ -444,6 +453,28 @@ export function RopaHomePage() {
                 </button>
               ))}
             </div>
+
+            {selectedGenreInfo ? (
+              <div className="ropa-genre-row ropa-genre-row--sub" role="group" aria-label={`Subcategorías de ${selectedGenreInfo.label}`}>
+                <button
+                  type="button"
+                  className={selectedSub === null ? "ropa-chip ropa-chip--sub is-active" : "ropa-chip ropa-chip--sub"}
+                  onClick={() => setSelectedSub(null)}
+                >
+                  Todo {selectedGenreInfo.label}
+                </button>
+                {selectedGenreInfo.subcategories.map((sub) => (
+                  <button
+                    type="button"
+                    key={sub.key}
+                    className={selectedSub === sub.key ? "ropa-chip ropa-chip--sub is-active" : "ropa-chip ropa-chip--sub"}
+                    onClick={() => setSelectedSub(sub.key)}
+                  >
+                    {sub.label}
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
 
           <main className="ropa-main">

@@ -1,6 +1,6 @@
 import { useRef, useState, type FormEvent } from "react";
 import { createProduct, getProductImageSrc, updateProduct, uploadProductImage } from "../ropa.client";
-import { ROPA_CATEGORY_OPTIONS } from "../ropa.categories";
+import { ROPA_CATEGORY_GROUPS } from "../ropa.categories";
 import { resizeImageFile } from "../ropa.imageResize";
 import type { RopaProduct } from "../ropa.types";
 
@@ -128,10 +128,14 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado }: Pro
             <span>Categoría</span>
             <select value={category} onChange={(event) => setCategory(event.target.value)}>
               <option value="">Elegir...</option>
-              {ROPA_CATEGORY_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
+              {ROPA_CATEGORY_GROUPS.map((group) => (
+                <optgroup key={group.genre} label={group.label}>
+                  {group.options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </label>

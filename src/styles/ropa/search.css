@@ -134,3 +134,15 @@
 .ropa-search-button:active {
   transform: scale(0.94);
 }
+
+/* Subcategorias (16/11/2026): fila mas chica abajo de las categorias, solo
+   cuando hay una categoria elegida. */
+.ropa-genre-row--sub {
+  margin-top: 8px;
+}
+
+.ropa-genre-row .ropa-chip--sub {
+  min-height: 28px;
+  padding: 0 12px;
+  font-size: 13px;
+}
