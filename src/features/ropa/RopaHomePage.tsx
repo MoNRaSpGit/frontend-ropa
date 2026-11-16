@@ -4,6 +4,7 @@ import {
   deleteClient,
   deleteProduct,
   getDiscountConfig,
+  getCarouselImageSrc,
   listCarouselImages,
   listClients,
   listProducts,
@@ -16,7 +17,12 @@ import { AdminClientsPage } from "./components/AdminClientsPage";
 import { AdminDiscountPage } from "./components/AdminDiscountPage";
 import { AdminProductsPage } from "./components/AdminProductsPage";
 import { AuthModal } from "./components/AuthModal";
-import { Carousel } from "./components/Carousel";
+import { Carousel, type CarouselSlide } from "./components/Carousel";
+
+const DEFAULT_CAROUSEL_SLIDES: CarouselSlide[] = [1, 2, 3].map((n) => ({
+  key: `demo-${n}`,
+  src: `${import.meta.env.BASE_URL}carrusel/anuncio-${n}.svg`
+}));
 import { CartDrawer } from "./components/CartDrawer";
 import { ClientFormModal } from "./components/ClientFormModal";
 import { Header } from "./components/Header";
@@ -145,6 +151,13 @@ export function RopaHomePage() {
     }, 250);
     return () => window.clearTimeout(timeoutId);
   }, [query]);
+
+  // Mientras el admin no cargue imagenes propias (o si no se pueden traer),
+  // se muestran 3 anuncios de ejemplo; apenas suba la primera, la reemplaza.
+  const carouselSlides: CarouselSlide[] =
+    carouselImages.length > 0 && !carouselError
+      ? carouselImages.map((image) => ({ key: image.id, src: getCarouselImageSrc(image) }))
+      : DEFAULT_CAROUSEL_SLIDES;
 
   async function refreshCarousel() {
     setIsCarouselLoading(true);
@@ -317,9 +330,9 @@ export function RopaHomePage() {
             lucir la foto de fondo antes del titulo/buscador; poniendo
             el carrusel afuera de este div quedaba pegado al titulo en
             vez de al header, por ese espacio de por medio. */}
-        {view === "catalogo" && !isCarouselLoading && !carouselError && carouselImages.length > 0 ? (
+        {view === "catalogo" && !isCarouselLoading ? (
           <div className="ropa-carousel-wrap">
-            <Carousel images={carouselImages} />
+            <Carousel images={carouselSlides} />
           </div>
         ) : null}
       </div>

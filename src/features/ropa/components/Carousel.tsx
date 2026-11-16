@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { getCarouselImageSrc } from "../ropa.client";
-import type { RopaCarouselImage } from "../ropa.types";
+export type CarouselSlide = { key: string | number; src: string };
 
 type CarouselProps = {
-  images: RopaCarouselImage[];
+  images: CarouselSlide[];
 };
 
 const AUTOPLAY_MS = 5000;
@@ -39,8 +38,8 @@ export function Carousel({ images }: CarouselProps) {
       <div className="ropa-carousel-viewport">
         <div className="ropa-carousel-track" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
           {images.map((image) => (
-            <div className="ropa-carousel-slide" key={image.id}>
-              <img src={getCarouselImageSrc(image)} alt="" loading="lazy" />
+            <div className="ropa-carousel-slide" key={image.key}>
+              <img src={image.src} alt="" loading="lazy" />
             </div>
           ))}
         </div>
@@ -65,7 +64,7 @@ export function Carousel({ images }: CarouselProps) {
         <div className="ropa-carousel-dots" role="tablist" aria-label="Imágenes destacadas">
           {images.map((image, index) => (
             <button
-              key={image.id}
+              key={image.key}
               type="button"
               className={index === activeIndex ? "ropa-carousel-dot is-active" : "ropa-carousel-dot"}
               onClick={() => goTo(index)}

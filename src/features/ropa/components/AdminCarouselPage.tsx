@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { addCarouselImage, deleteCarouselImage, getCarouselImageSrc } from "../ropa.client";
-import { resizeBackgroundImageFile } from "../ropa.imageResize";
+import { CAROUSEL_HEIGHT, CAROUSEL_WIDTH, resizeBackgroundImageFile } from "../ropa.imageResize";
 import type { RopaCarouselImage } from "../ropa.types";
 
 type AdminCarouselPageProps = {
@@ -73,8 +73,9 @@ export function AdminCarouselPage({ token, images, isLoading, error, onAgregada,
       </div>
 
       <p className="ropa-hint">
-        La foto original del sitio siempre es la primera. Las que agregues acá se suman después de ella y el fondo va
-        rotando entre todas, una por una.
+        Medida ideal: <strong>{CAROUSEL_WIDTH} × {CAROUSEL_HEIGHT} px</strong> (horizontal). Podés subir cualquier
+        tamaño: la imagen se ajusta sola y nunca se corta (si no tiene esa forma, se muestra entera sobre un fondo
+        difuminado). Mientras no subas ninguna, el carrusel muestra 3 anuncios de ejemplo.
       </p>
 
       {error ? <p className="ropa-error ropa-error--center">{error}</p> : null}
