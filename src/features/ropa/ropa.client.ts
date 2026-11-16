@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "../../shared/config/api";
 import { getUnitPrice } from "./ropa.pricing";
+import type { RopaGenre } from "./ropa.genres";
 import type { RopaCarouselImage, RopaClient, RopaDiscountConfig, RopaProduct, RopaProductStatus, RopaUser } from "./ropa.types";
 
 function buildUrl(path: string) {
@@ -271,4 +272,43 @@ export async function loginUser(payload: { email: string; password: string }) {
 
 export async function logoutUser(token: string) {
   await fetch(buildUrl("/ropa/auth/logout"), { method: "POST", headers: authHeaders(token) }).catch(() => {});
+}
+
+// Categorias y subcategorias editables por el administrador (16/11/2026).
+export async function listCategories(): Promise<RopaGenre[]> {
+  const response = await fetch(buildUrl("/ropa/categories"));
+  const data = await readJson<{ items: RopaGenre[] }>(response);
+  return data.items;
+}
+
+export async function createCategory(token: string, label: string, parentId?: number) {
+  const response = await fetch(buildUrl("/ropa/categories"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders(token) },
+    body: JSON.stringify({ label, parentId })
+  });
+  return readJson<{ id: number; key: string; label: string }>(response);
+}
+
+export async function renameCategory(token: string, id: number, label: string) {
+  const response = await fetch(buildUrl(`/ropa/categories/${id}`), {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...authHeaders(token) },
+    body: JSON.stringify({ label })
+  });
+  await readJson<{ ok: boolean }>(response);
+}
+
+export async function moveCategory(token: string, id: number, direction: "up" | "down") {
+  const response = await fetch(buildUrl(`/ropa/categories/${id}/move`), {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders(token) },
+    body: JSON.stringify({ direction })
+  });
+  await readJson<{ ok: boolean }>(response);
+}
+
+export async function deleteCategory(token: string, id: number) {
+  const response = await fetch(buildUrl(`/ropa/categories/${id}`), { method: "DELETE", headers: authHeaders(token) });
+  await readJson<{ ok: boolean }>(response);
 }

@@ -1,12 +1,18 @@
+import { useSyncExternalStore } from "react";
+
 // Categorias y subcategorias de la tienda (16/11/2026, lista de la clienta).
 // En el producto se guarda "categoria:subcategoria" (ej. "accesorios:pulseras-perlas").
 // Para agregar/cambiar una: tocar SOLO esta lista (las keys ya usadas en
 // productos no se renombran, solo el label).
-export type RopaGenreKey = "accesorios" | "bebes" | "escolar" | "fiestas" | "regalos" | "verano";
+export type RopaGenreKey = string;
 
-export type RopaSubcategory = { key: string; label: string };
+export type RopaSubcategory = { id?: number; key: string; label: string };
+export type RopaGenre = { id?: number; key: RopaGenreKey; label: string; subcategories: RopaSubcategory[] };
 
-export const ROPA_GENRES: Array<{ key: RopaGenreKey; label: string; subcategories: RopaSubcategory[] }> = [
+// Lista que se usa mientras el servidor no responde (y de punto de partida):
+// desde el 16/11/2026 la lista REAL la edita el administrador y se carga del
+// servidor (setRopaGenres). Las keys ya usadas en productos no se renombran.
+export const DEFAULT_ROPA_GENRES: RopaGenre[] = [
   {
     key: "accesorios",
     label: "Accesorios",
@@ -68,7 +74,33 @@ export const ROPA_GENRES: Array<{ key: RopaGenreKey; label: string; subcategorie
   }
 ];
 
-const GENRES_BY_KEY = new Map(ROPA_GENRES.map((genre) => [genre.key as string, genre]));
+// Almacen simple (sin librerias): el catalogo y el admin se suscriben con
+// useRopaGenres y se redibujan cuando el administrador cambia las categorias.
+let currentGenres: RopaGenre[] = DEFAULT_ROPA_GENRES;
+const listeners = new Set<() => void>();
+
+export function getRopaGenres(): RopaGenre[] {
+  return currentGenres;
+}
+
+export function setRopaGenres(genres: RopaGenre[]) {
+  currentGenres = genres;
+  listeners.forEach((listener) => listener());
+}
+
+export function useRopaGenres(): RopaGenre[] {
+  return useSyncExternalStore(
+    (listener) => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+    getRopaGenres
+  );
+}
+
+function genresByKey() {
+  return new Map(currentGenres.map((genre) => [genre.key as string, genre]));
+}
 
 function splitCategory(category: string | null): [string, string | null] | null {
   if (!category) return null;
@@ -78,20 +110,20 @@ function splitCategory(category: string | null): [string, string | null] | null 
 
 export function getGenreForCategory(category: string | null): RopaGenreKey | null {
   const parts = splitCategory(category);
-  return parts && GENRES_BY_KEY.has(parts[0]) ? (parts[0] as RopaGenreKey) : null;
+  return parts && genresByKey().has(parts[0]) ? parts[0] : null;
 }
 
 export function getSubcategoryForCategory(category: string | null): string | null {
   const parts = splitCategory(category);
   if (!parts || !parts[1]) return null;
-  return GENRES_BY_KEY.get(parts[0])?.subcategories.some((sub) => sub.key === parts[1]) ? parts[1] : null;
+  return genresByKey().get(parts[0])?.subcategories.some((sub) => sub.key === parts[1]) ? parts[1] : null;
 }
 
 // Texto para mostrar: "Accesorios · Pulseras de perlas".
 export function getCategoryLabel(category: string | null): string | null {
   const parts = splitCategory(category);
   if (!parts) return null;
-  const genre = GENRES_BY_KEY.get(parts[0]);
+  const genre = genresByKey().get(parts[0]);
   if (!genre) return category;
   const sub = genre.subcategories.find((item) => item.key === parts[1]);
   return sub ? `${genre.label} · ${sub.label}` : genre.label;

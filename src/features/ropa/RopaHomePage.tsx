@@ -7,6 +7,7 @@ import {
   getCarouselDesktopImageSrc,
   getCarouselImageSrc,
   listCarouselImages,
+  listCategories,
   listClients,
   listProducts,
   logoutUser,
@@ -44,7 +45,8 @@ import { ProductCard } from "./components/ProductCard";
 import { ProductDetailModal } from "./components/ProductDetailModal";
 import { ProductFormModal } from "./components/ProductFormModal";
 import { Footer } from "./components/Footer";
-import { getGenreForCategory, getSubcategoryForCategory, ROPA_GENRES, type RopaGenreKey } from "./ropa.genres";
+import { getGenreForCategory, getSubcategoryForCategory, setRopaGenres, useRopaGenres, type RopaGenreKey } from "./ropa.genres";
+import { AdminCategoriesPage } from "./components/AdminCategoriesPage";
 import { type RopaSize } from "./ropa.pricing";
 import { clearSession, loadSession, saveSession, type RopaSession } from "./ropa.session";
 import { setTrackingEnabled, trackEvent } from "./ropa.track";
@@ -63,14 +65,25 @@ export function RopaHomePage() {
   // propia del admin para cargar/editar/borrar -- pedido explicito
   // (15/09/2026): "que no ingrese directo en la pantalla principal, que
   // tenga su propia pestaña".
-  const [view, setView] = useState<"catalogo" | "productos" | "carrusel" | "clientes" | "codigo">("catalogo");
+  const [view, setView] = useState<"catalogo" | "productos" | "carrusel" | "clientes" | "codigo" | "categorias">("catalogo");
   const [query, setQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState<RopaGenreKey | null>(null);
   // Subcategoria (16/11/2026): se elige despues de la categoria; al cambiar
   // de categoria vuelve a "Todas".
   const [selectedSub, setSelectedSub] = useState<string | null>(null);
   useEffect(() => setSelectedSub(null), [selectedGenre]);
-  const selectedGenreInfo = ROPA_GENRES.find((genre) => genre.key === selectedGenre) ?? null;
+  const ropaGenres = useRopaGenres();
+  const selectedGenreInfo = ropaGenres.find((genre) => genre.key === selectedGenre) ?? null;
+
+  // Categorias editables por el administrador (16/11/2026): se piden al
+  // servidor; si no responde, queda la lista de respaldo del codigo.
+  useEffect(() => {
+    void listCategories()
+      .then((items) => {
+        if (items.length > 0) setRopaGenres(items);
+      })
+      .catch(() => undefined);
+  }, []);
   const [products, setProducts] = useState<RopaProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -345,6 +358,7 @@ export function RopaHomePage() {
           onCarrusel={() => setView("carrusel")}
           onClientes={() => setView("clientes")}
           onCodigo={() => setView("codigo")}
+          onCategorias={() => setView("categorias")}
           onIngresar={() => setShowAuthModal(true)}
           onSalir={() => void handleSalir()}
           onAbrirCarrito={handleOpenCart}
@@ -393,6 +407,8 @@ export function RopaHomePage() {
           onEditar={handleEditarCliente}
           onEliminar={(client) => void handleEliminarCliente(client)}
         />
+      ) : view === "categorias" && isAdmin && session ? (
+        <AdminCategoriesPage token={session.token} />
       ) : view === "codigo" && isAdmin && session ? (
         <AdminDiscountPage
           token={session.token}
@@ -442,7 +458,7 @@ export function RopaHomePage() {
               >
                 Todos
               </button>
-              {ROPA_GENRES.map((genre) => (
+              {ropaGenres.map((genre) => (
                 <button
                   type="button"
                   key={genre.key}

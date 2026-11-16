@@ -1,6 +1,7 @@
 import { useRef, useState, type FormEvent } from "react";
 import { createProduct, getProductImageSrc, updateProduct, uploadProductImage } from "../ropa.client";
-import { ROPA_CATEGORY_GROUPS } from "../ropa.categories";
+import { buildCategoryGroups } from "../ropa.categories";
+import { useRopaGenres } from "../ropa.genres";
 import { resizeImageFile } from "../ropa.imageResize";
 import type { RopaProduct } from "../ropa.types";
 
@@ -17,6 +18,7 @@ type ProductFormModalProps = {
 // (15/09/2026): "el precio va a ser en pesos... eso es mensual". No hay
 // selector de moneda, se manda fijo.
 export function ProductFormModal({ token, product, onCancelar, onGuardado }: ProductFormModalProps) {
+  const genres = useRopaGenres();
   const isEditing = Boolean(product);
   const [name, setName] = useState(product?.name ?? "");
   const [price, setPrice] = useState(product ? String(product.price) : "");
@@ -128,7 +130,7 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado }: Pro
             <span>Categoría</span>
             <select value={category} onChange={(event) => setCategory(event.target.value)}>
               <option value="">Elegir...</option>
-              {ROPA_CATEGORY_GROUPS.map((group) => (
+              {buildCategoryGroups(genres).map((group) => (
                 <optgroup key={group.genre} label={group.label}>
                   {group.options.map((option) => (
                     <option key={option.value} value={option.value}>

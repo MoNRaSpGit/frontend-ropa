@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ROPA_GENRES, type RopaGenreKey } from "../ropa.genres";
+import { useRopaGenres, type RopaGenreKey } from "../ropa.genres";
 import type { RopaSession } from "../ropa.session";
 import { trackEvent } from "../ropa.track";
 import { buildWhatsAppHref } from "../ropa.whatsapp";
@@ -11,12 +11,13 @@ type HeaderProps = {
   cartCount: number;
   selectedGenre: RopaGenreKey | null;
   onSelectGenre: (genre: RopaGenreKey | null) => void;
-  activeView: "catalogo" | "productos" | "carrusel" | "clientes" | "codigo";
+  activeView: "catalogo" | "productos" | "carrusel" | "clientes" | "codigo" | "categorias";
   onInicio: () => void;
   onProductos: () => void;
   onCarrusel: () => void;
   onClientes: () => void;
   onCodigo: () => void;
+  onCategorias: () => void;
   onIngresar: () => void;
   onSalir: () => void;
   onAbrirCarrito: () => void;
@@ -36,11 +37,13 @@ export function Header({
   onCarrusel,
   onClientes,
   onCodigo,
+  onCategorias,
   onIngresar,
   onSalir,
   onAbrirCarrito
 }: HeaderProps) {
   const [showFeatures, setShowFeatures] = useState(false);
+  const genres = useRopaGenres();
   const isAdmin = session?.user.role === "administrador";
 
   function handleSelectGenre(genre: RopaGenreKey | null) {
@@ -111,6 +114,16 @@ export function Header({
           </button>
         ) : null}
 
+        {isAdmin ? (
+          <button
+            type="button"
+            className={activeView === "categorias" ? "ropa-nav-link is-active" : "ropa-nav-link"}
+            onClick={onCategorias}
+          >
+            Categorías
+          </button>
+        ) : null}
+
         <div className="ropa-features-dropdown">
           <button
             type="button"
@@ -132,7 +145,7 @@ export function Header({
               >
                 Todos
               </button>
-              {ROPA_GENRES.map((genre) => (
+              {genres.map((genre) => (
                 <button
                   type="button"
                   key={genre.key}
