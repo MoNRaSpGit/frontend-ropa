@@ -62,7 +62,7 @@
 
 .ropa-carousel-item {
   position: relative;
-  aspect-ratio: 1920 / 300;
+  aspect-ratio: 4 / 1;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -158,8 +158,14 @@
      1920 x 300 (la misma que se compone al subir). El alto acompana al ancho
      de la pantalla (la imagen entra entera) pero con un piso para que en
      pantallas chicas no quede una tirita: ahi se ve el centro de la imagen. */
-  --ropa-carousel-min-height: 200px;
-  height: max(var(--ropa-carousel-min-height), calc(100vw * 300 / 1920));
+  /* 17/11/2026: UNA imagen para celular y PC, de 1600 x 400 (4 a 1). La caja
+     sigue la forma de la imagen: en PC se ve ENTERA. En celular el piso de 130px
+     la hace un poco mas alta que 4 a 1 y se recortan apenas los costados (lo
+     importante va al centro). En pantallas enormes el tope de 460px evita que
+     crezca de mas. */
+  aspect-ratio: 4 / 1;
+  min-height: 130px;
+  max-height: 460px;
   overflow: hidden;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
@@ -249,13 +255,9 @@
    todo el alto. Punto de vuelta atras: tag punto-carrusel-hibrido-316.
    Para mas alto en celular, subir --ropa-carousel-mobile-min-height. */
 @media (max-width: 640px) {
-  .ropa-carousel-viewport {
-    --ropa-carousel-min-height: 130px;
-  }
-
-  /* En celular solo entra una parte de lo ancho: se ancla a la izquierda
-     (donde va el titular) en vez de al centro. */
+  /* En celular se ve la parte central de la imagen (los costados se recortan
+     apenas), por eso el contenido importante va al centro. */
   .ropa-carousel-slide img {
-    object-position: 15% center;
+    object-position: center;
   }
 }

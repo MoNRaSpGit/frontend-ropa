@@ -10,14 +10,17 @@
 const PRODUCT_MAX_SIDE = 1280;
 const PRODUCT_JPEG_QUALITY = 0.85;
 
-// Medidas RECOMENDADAS para el carrusel (las que se le dicen al admin en los
-// prompts para IA): celular 1200x400, PC 1920x300. Si sube otra forma, se
-// guarda como es (solo se achica el ancho si pasa de la medida).
-export const CAROUSEL_SIZES = {
-  mobile: { width: 1200, height: 400 },
-  desktop: { width: 1920, height: 300 }
-} as const;
-const CAROUSEL_JPEG_QUALITY = 0.82;
+// Carrusel (17/11/2026): UNA sola imagen para celular y PC, de 1600 x 400 (4 a 1).
+// En PC se ve entera; en celular se recortan un poco los costados. Antes de
+// subirla se revisa la forma: se acepta un poco de margen (3,4 a 4,6 a 1), pero
+// una imagen con otra forma (por ejemplo una franja 6,4 a 1) se rechaza con un
+// aviso claro, porque se vería recortada o chica.
+export const CAROUSEL_SIZE = { width: 1600, height: 400 } as const;
+const CAROUSEL_MIN_RATIO = 3.4;
+const CAROUSEL_MAX_RATIO = 4.6;
+const CAROUSEL_MIN_WIDTH = 1000;
+const CAROUSEL_MAX_WIDTH = 1920;
+const CAROUSEL_JPEG_QUALITY = 0.85;
 
 // Achica (nunca agranda) manteniendo las proporciones. Sin soporte de canvas
 // (muy raro) se manda la original tal cual.
@@ -49,10 +52,26 @@ export function resizeImageFile(file: File): Promise<string> {
   return downscale(file, PRODUCT_MAX_SIDE, PRODUCT_MAX_SIDE, PRODUCT_JPEG_QUALITY);
 }
 
-// Carrusel (celular o PC): tal cual, solo achicada si pasa del ancho recomendado.
-export function resizeCarouselImageFile(file: File, variant: keyof typeof CAROUSEL_SIZES): Promise<string> {
-  const { width } = CAROUSEL_SIZES[variant];
-  return downscale(file, width, Number.POSITIVE_INFINITY, CAROUSEL_JPEG_QUALITY);
+// Revisa la forma y achica si hace falta (nunca agranda ni recorta). Si no
+// cumple, lanza un Error con el motivo para mostrarlo tal cual.
+export async function prepareCarouselImage(file: File): Promise<string> {
+  const originalDataUri = await readFileAsDataUri(file);
+  const image = await loadImage(originalDataUri);
+  const ratio = image.width / image.height;
+  const ratioText = ratio.toFixed(1).replace(".", ",");
+
+  if (ratio < CAROUSEL_MIN_RATIO || ratio > CAROUSEL_MAX_RATIO) {
+    throw new Error(
+      `Esta imagen mide ${image.width} × ${image.height} px (proporción ${ratioText} a 1). Para que se vea bien en celular y en PC tiene que ser 4 a 1, por ejemplo ${CAROUSEL_SIZE.width} × ${CAROUSEL_SIZE.height} px.`
+    );
+  }
+  if (image.width < CAROUSEL_MIN_WIDTH) {
+    throw new Error(
+      `Esta imagen es muy chica (${image.width} px de ancho) y se vería borrosa. Usá una de al menos ${CAROUSEL_MIN_WIDTH} px de ancho, mejor ${CAROUSEL_SIZE.width} × ${CAROUSEL_SIZE.height} px.`
+    );
+  }
+
+  return downscale(file, CAROUSEL_MAX_WIDTH, Number.POSITIVE_INFINITY, CAROUSEL_JPEG_QUALITY);
 }
 
 function readFileAsDataUri(file: File): Promise<string> {
