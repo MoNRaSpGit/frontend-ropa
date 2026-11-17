@@ -97,7 +97,9 @@
 .ropa-card-media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* 17/11/2026: la foto se ve ENTERA, tal cual la subio la admin (sin recorte ni
+     relleno difuminado). Si no es cuadrada, quedan franjas del fondo rosa. */
+  object-fit: contain;
   display: block;
 }
 
