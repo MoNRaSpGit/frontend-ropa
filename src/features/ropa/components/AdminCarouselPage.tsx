@@ -21,8 +21,8 @@ const AI_PROMPT = `Necesito un banner publicitario para el carrusel de la tienda
 Medidas exactas: ${CAROUSEL_SIZE.width} x ${CAROUSEL_SIZE.height} píxeles (una franja horizontal, proporción 4:1).
 
 Cómo tiene que ser:
-- Se ve en el celular Y en la computadora con la misma imagen. En la compu se ve entera; en el celular se recortan un poco los COSTADOS. Por eso todo lo importante (título, producto, logo) tiene que ir en la zona CENTRAL: entre los píxeles 240 y 1360 de ancho.
-- Los costados (los primeros y últimos 240 px) solo con fondo, color o decoración que se pueda cortar sin problema.
+- La misma imagen se ve en el celular y en la computadora. En la compu se ve casi entera; en el celular se recortan los COSTADOS. Por eso TODO lo importante (título, frase, producto, logo) tiene que estar CENTRADO, dentro del 45% central del ancho (entre los píxeles 440 y 1160).
+- Los costados y las ESQUINAS tienen que quedar libres: nada de letras, logos ni imágenes ahí. Solo fondo, color o una decoración suave que se pueda cortar sin problema.
 - Dejá al menos 30 px libres arriba y abajo: ningún texto pegado al borde.
 - Un título corto y bien grande (2 a 5 palabras) y, como mucho, una frase breve. En el celular la imagen se ve chica: nada de letra chica.
 - Estilo de la tienda: rosa pastel, femenino, limpio y moderno. Buen contraste entre el texto y el fondo para que se lea.
@@ -96,9 +96,12 @@ export function AdminCarouselPage({ token, images, isLoading, error, onAgregada,
 
       <div className="ropa-carousel-size">
         <strong>
-          Medida: {CAROUSEL_SIZE.width} × {CAROUSEL_SIZE.height} px (4 a 1)
+          Medida: {CAROUSEL_SIZE.width} × {CAROUSEL_SIZE.height} px (4 a 1). También sirve más finita, hasta 1600 × 250.
         </strong>
-        <span>La misma imagen se ve en celular y en PC. Lo importante al centro: en el celular se recortan un poco los costados.</span>
+        <span>
+          La misma imagen se ve en celular y en PC. Todo lo importante tiene que ir CENTRADO (en el 45% del medio): en el celular se recortan los
+          costados, así que nada de letras ni imágenes en los costados ni en las esquinas.
+        </span>
         <button type="button" className="ropa-button ropa-button--ghost" onClick={() => void copyPrompt()}>
           Copiar prompt para IA
         </button>

@@ -10,14 +10,15 @@
 const PRODUCT_MAX_SIDE = 1280;
 const PRODUCT_JPEG_QUALITY = 0.85;
 
-// Carrusel (17/11/2026): UNA sola imagen para celular y PC, de 1600 x 400 (4 a 1).
-// En PC se ve entera; en celular se recortan un poco los costados. Antes de
-// subirla se revisa la forma: se acepta un poco de margen (3,4 a 4,6 a 1), pero
-// una imagen con otra forma (por ejemplo una franja 6,4 a 1) se rechaza con un
-// aviso claro, porque se vería recortada o chica.
+// Carrusel (17/11/2026): UNA sola imagen para celular y PC. Medida recomendada:
+// 1600 x 400 (4 a 1), pero se acepta cualquier franja horizontal entre 4 a 1 y
+// 6,5 a 1 (por ejemplo 1600 x 250). La caja del carrusel es 4 a 1: en PC se ve
+// casi entera y en celular se ve solo la parte central, asi que lo importante
+// (texto, producto) tiene que ir en el CENTRO, nunca en los costados ni las
+// esquinas. Fuera de ese rango se rechaza con un aviso claro.
 export const CAROUSEL_SIZE = { width: 1600, height: 400 } as const;
-const CAROUSEL_MIN_RATIO = 3.4;
-const CAROUSEL_MAX_RATIO = 4.6;
+const CAROUSEL_MIN_RATIO = 3.6;
+const CAROUSEL_MAX_RATIO = 6.5;
 const CAROUSEL_MIN_WIDTH = 1000;
 const CAROUSEL_MAX_WIDTH = 1920;
 const CAROUSEL_JPEG_QUALITY = 0.85;
@@ -62,7 +63,7 @@ export async function prepareCarouselImage(file: File): Promise<string> {
 
   if (ratio < CAROUSEL_MIN_RATIO || ratio > CAROUSEL_MAX_RATIO) {
     throw new Error(
-      `Esta imagen mide ${image.width} × ${image.height} px (proporción ${ratioText} a 1). Para que se vea bien en celular y en PC tiene que ser 4 a 1, por ejemplo ${CAROUSEL_SIZE.width} × ${CAROUSEL_SIZE.height} px.`
+      `Esta imagen mide ${image.width} × ${image.height} px (proporción ${ratioText} a 1). Para que se vea bien en celular y en PC tiene que ser una franja horizontal entre 4 a 1 y 6,4 a 1, por ejemplo ${CAROUSEL_SIZE.width} × ${CAROUSEL_SIZE.height} px o 1600 × 250 px.`
     );
   }
   if (image.width < CAROUSEL_MIN_WIDTH) {
