@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { getProductImageSrc } from "../ropa.client";
 import { getCategoryLabel } from "../ropa.genres";
+import { PRODUCT_IMAGE_SIZE } from "../ropa.imageResize";
 import { getUnitPrice } from "../ropa.pricing";
 import type { RopaProduct } from "../ropa.types";
 
@@ -73,6 +74,12 @@ export function AdminProductsPage({ products, isLoading, error, onNuevo, onEdita
           + Ingresar producto
         </button>
       </div>
+
+      <p className="ropa-size-line">
+        <strong>
+          Medidas de producto ({PRODUCT_IMAGE_SIZE.width} x {PRODUCT_IMAGE_SIZE.height} px) (Instagram)
+        </strong>
+      </p>
 
       <p className="ropa-hint">Cambiá el número de posición de una tarjeta para moverla -- la que estaba en ese lugar pasa al de ella.</p>
 

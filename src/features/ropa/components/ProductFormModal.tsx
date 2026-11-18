@@ -157,7 +157,7 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
             </div>
             <small className="ropa-size-line">
               <strong>
-                Medidas de producto ({PRODUCT_IMAGE_SIZE.width} x {PRODUCT_IMAGE_SIZE.height} px) (4A5)
+                Medidas de producto ({PRODUCT_IMAGE_SIZE.width} x {PRODUCT_IMAGE_SIZE.height} px) (Instagram)
               </strong>
             </small>
           </label>
