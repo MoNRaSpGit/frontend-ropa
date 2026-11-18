@@ -361,9 +361,14 @@
   /* "Nueva subcategoria": escondida hasta tocar el boton del grupo. */
   .ropa-cat-add-toggle {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin: 8px 0 0 4px;
-    padding: 7px 14px;
+    height: 34px;
+    min-height: 0;
+    padding: 0 16px;
     font-size: 13px;
+    line-height: 1;
   }
 
   .ropa-cat-add--sub:not(.is-open) {
