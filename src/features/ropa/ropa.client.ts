@@ -114,6 +114,26 @@ export async function uploadProductImage(token: string, productId: number, dataU
   return data.item;
 }
 
+// Fotos extra del producto (17/11/2026): devuelven el producto actualizado.
+export async function addProductGalleryImage(token: string, productId: number, dataUri: string) {
+  const response = await fetch(buildUrl(`/ropa/products/${productId}/gallery`), {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeaders(token) },
+    body: JSON.stringify({ dataUri })
+  });
+  const data = await readJson<{ item: RopaProduct }>(response);
+  return data.item;
+}
+
+export async function deleteProductGalleryImage(token: string, productId: number, imageId: number) {
+  const response = await fetch(buildUrl(`/ropa/products/${productId}/gallery/${imageId}`), {
+    method: "DELETE",
+    headers: authHeaders(token)
+  });
+  const data = await readJson<{ item: RopaProduct }>(response);
+  return data.item;
+}
+
 // Avisa al backend que alguien toco "Comprar por WhatsApp" con este carrito
 // (19/09/2026, pedido explicito: contabilizar las ventas). Es una intencion
 // de compra, no una venta confirmada -- el pedido se cierra por WhatsApp,

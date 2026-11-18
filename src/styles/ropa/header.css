@@ -292,3 +292,90 @@
 .ropa-brand-logo-button .ropa-brand-text {
   cursor: pointer;
 }
+
+/* Menu del usuario en celular (17/11/2026): icono al lado del carrito.
+   Solo en celular; en PC se sigue viendo "nombre + Salir". */
+.ropa-user-menu {
+  display: none;
+  position: relative;
+}
+
+.ropa-user-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: rgba(255, 245, 248, 0.7);
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.ropa-user-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 190px;
+  padding: 8px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background: rgba(255, 250, 252, 0.98);
+  box-shadow: 0 14px 32px rgba(150, 70, 100, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 30;
+}
+
+.ropa-user-panel-title {
+  padding: 6px 12px 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.ropa-user-item {
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 12px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.ropa-user-item:hover,
+.ropa-user-item:active {
+  background: rgba(150, 70, 100, 0.08);
+}
+
+.ropa-user-item.is-active {
+  color: var(--color-accent);
+}
+
+.ropa-user-item--exit {
+  color: #b23a5a;
+}
+
+.ropa-user-divider {
+  height: 1px;
+  margin: 6px 4px;
+  background: var(--color-border);
+}
+
+@media (max-width: 640px) {
+  .ropa-user-menu {
+    display: block;
+  }
+
+  /* En celular el nombre + Salir se reemplazan por el menu del icono. */
+  .ropa-session {
+    display: none;
+  }
+}

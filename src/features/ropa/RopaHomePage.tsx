@@ -582,6 +582,7 @@ export function RopaHomePage() {
           token={session.token}
           product={productFormTarget === "new" ? undefined : productFormTarget}
           onCancelar={() => setProductFormTarget(null)}
+          onProductoActualizado={(product) => setProducts((current) => current.map((item) => (item.id === product.id ? product : item)))}
           onGuardado={(product) => {
             const wasEditing = productFormTarget !== "new";
             setProductFormTarget(null);

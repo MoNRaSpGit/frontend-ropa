@@ -1,5 +1,6 @@
 import { useRef, useState, type FormEvent } from "react";
-import { createProduct, getProductImageSrc, updateProduct, uploadProductImage } from "../ropa.client";
+import { toast } from "react-toastify";
+import { addProductGalleryImage, createProduct, deleteProductGalleryImage, getProductImageSrc, updateProduct, uploadProductImage } from "../ropa.client";
 import { buildCategoryGroups } from "../ropa.categories";
 import { useRopaGenres } from "../ropa.genres";
 import { resizeImageFile } from "../ropa.imageResize";
@@ -12,12 +13,14 @@ type ProductFormModalProps = {
   product?: RopaProduct;
   onCancelar: () => void;
   onGuardado: (product: RopaProduct) => void;
+  // Las fotos extra se suben/borran al instante: avisa para refrescar el catalogo.
+  onProductoActualizado?: (product: RopaProduct) => void;
 };
 
 // Precio SIEMPRE en pesos (UYU) y SIEMPRE mensual -- pedido explicito
 // (15/09/2026): "el precio va a ser en pesos... eso es mensual". No hay
 // selector de moneda, se manda fijo.
-export function ProductFormModal({ token, product, onCancelar, onGuardado }: ProductFormModalProps) {
+export function ProductFormModal({ token, product, onCancelar, onGuardado, onProductoActualizado }: ProductFormModalProps) {
   const genres = useRopaGenres();
   const isEditing = Boolean(product);
   const [name, setName] = useState(product?.name ?? "");
@@ -30,6 +33,43 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado }: Pro
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // Fotos extra (otros angulos) -- solo al editar, porque necesitan el id del producto.
+  const MAX_GALLERY = 5;
+  const [gallery, setGallery] = useState(product?.gallery ?? []);
+  const [galleryBusy, setGalleryBusy] = useState(false);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleGalleryFile(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !product) return;
+    setGalleryBusy(true);
+    try {
+      const resized = await resizeImageFile(file);
+      const updated = await addProductGalleryImage(token, product.id, resized);
+      setGallery(updated.gallery ?? []);
+      onProductoActualizado?.(updated);
+      toast.success("Foto agregada.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "No se pudo agregar la foto.");
+    } finally {
+      setGalleryBusy(false);
+    }
+  }
+
+  async function handleGalleryDelete(imageId: number) {
+    if (!product) return;
+    setGalleryBusy(true);
+    try {
+      const updated = await deleteProductGalleryImage(token, product.id, imageId);
+      setGallery(updated.gallery ?? []);
+      onProductoActualizado?.(updated);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "No se pudo borrar la foto.");
+    } finally {
+      setGalleryBusy(false);
+    }
+  }
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -118,8 +158,37 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado }: Pro
                 {imagePreview ? "Cambiar imagen" : "Elegir imagen"}
               </button>
             </div>
-            <small>Se ajusta sola al tamaño de la tarjeta -- no hace falta subir algo pesado.</small>
+            <small>Mejor cuadrada (1000 × 1000 px) y con el producto grande y centrado. Se muestra tal cual la subís.</small>
           </label>
+
+          {isEditing ? (
+            <div className="ropa-field">
+              <span>
+                Más fotos (otros ángulos) · {gallery.length}/{MAX_GALLERY}
+              </span>
+              <div className="ropa-gallery-editor">
+                {gallery.map((photo) => (
+                  <div className="ropa-gallery-thumb" key={photo.id}>
+                    <img src={photo.url} alt="Foto extra" />
+                    <button type="button" className="ropa-gallery-thumb-remove" onClick={() => void handleGalleryDelete(photo.id)} disabled={galleryBusy} aria-label="Quitar foto">
+                      ×
+                    </button>
+                  </div>
+                ))}
+                {gallery.length < MAX_GALLERY ? (
+                  <>
+                    <input type="file" accept="image/*" ref={galleryInputRef} onChange={(event) => void handleGalleryFile(event)} hidden />
+                    <button type="button" className="ropa-gallery-add" onClick={() => galleryInputRef.current?.click()} disabled={galleryBusy}>
+                      {galleryBusy ? "..." : "+"}
+                    </button>
+                  </>
+                ) : null}
+              </div>
+              <small>Se pasan dentro del producto, como un carrusel. Se suben al instante, no hace falta guardar.</small>
+            </div>
+          ) : (
+            <p className="ropa-hint">Guardá el producto y después, desde "Editar", podés sumarle más fotos (otros ángulos).</p>
+          )}
 
           <label className="ropa-field">
             <span>Nombre</span>

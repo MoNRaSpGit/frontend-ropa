@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRopaGenres, type RopaGenreKey } from "../ropa.genres";
 import type { RopaSession } from "../ropa.session";
 import { trackEvent } from "../ropa.track";
@@ -45,6 +45,28 @@ export function Header({
   const [showFeatures, setShowFeatures] = useState(false);
   const genres = useRopaGenres();
   const isAdmin = session?.user.role === "administrador";
+  // Menu del usuario (solo celular, 17/11/2026): el icono de usuario al lado del
+  // carrito. Administrador: todas las pestañas + Salir. Usuario comun: solo Salir.
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showUserMenu) return undefined;
+    function handleOutside(event: MouseEvent | TouchEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) setShowUserMenu(false);
+    }
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("touchstart", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("touchstart", handleOutside);
+    };
+  }, [showUserMenu]);
+
+  function runAndClose(action: () => void) {
+    setShowUserMenu(false);
+    action();
+  }
 
   function handleSelectGenre(genre: RopaGenreKey | null) {
     onSelectGenre(genre);
@@ -183,12 +205,64 @@ export function Header({
         </button>
 
         {session ? (
-          <div className="ropa-session">
-            <span className="ropa-session-name">{session.user.fullName || session.user.email}</span>
-            <button type="button" className="ropa-button ropa-button--ghost" onClick={onSalir}>
-              Salir
-            </button>
-          </div>
+          <>
+            {/* PC: nombre + Salir como siempre (las pestañas estan en el menu de arriba). */}
+            <div className="ropa-session">
+              <span className="ropa-session-name">{session.user.fullName || session.user.email}</span>
+              <button type="button" className="ropa-button ropa-button--ghost" onClick={onSalir}>
+                Salir
+              </button>
+            </div>
+
+            {/* Celular: icono de usuario con el menu desplegable. */}
+            <div className="ropa-user-menu" ref={userMenuRef}>
+              <button
+                type="button"
+                className="ropa-user-button"
+                onClick={() => setShowUserMenu((current) => !current)}
+                aria-haspopup="menu"
+                aria-expanded={showUserMenu}
+                aria-label="Menú de usuario"
+              >
+                <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
+                </svg>
+              </button>
+
+              {showUserMenu ? (
+                <div className="ropa-user-panel" role="menu">
+                  {isAdmin ? (
+                    <>
+                      <span className="ropa-user-panel-title">Administrador</span>
+                      <button type="button" role="menuitem" className={activeView === "catalogo" ? "ropa-user-item is-active" : "ropa-user-item"} onClick={() => runAndClose(onInicio)}>
+                        Inicio
+                      </button>
+                      <button type="button" role="menuitem" className={activeView === "productos" ? "ropa-user-item is-active" : "ropa-user-item"} onClick={() => runAndClose(onProductos)}>
+                        Productos
+                      </button>
+                      <button type="button" role="menuitem" className={activeView === "carrusel" ? "ropa-user-item is-active" : "ropa-user-item"} onClick={() => runAndClose(onCarrusel)}>
+                        Carrusel
+                      </button>
+                      <button type="button" role="menuitem" className={activeView === "clientes" ? "ropa-user-item is-active" : "ropa-user-item"} onClick={() => runAndClose(onClientes)}>
+                        Clientes
+                      </button>
+                      <button type="button" role="menuitem" className={activeView === "codigo" ? "ropa-user-item is-active" : "ropa-user-item"} onClick={() => runAndClose(onCodigo)}>
+                        Código
+                      </button>
+                      <button type="button" role="menuitem" className={activeView === "categorias" ? "ropa-user-item is-active" : "ropa-user-item"} onClick={() => runAndClose(onCategorias)}>
+                        Categorías
+                      </button>
+                      <div className="ropa-user-divider" />
+                    </>
+                  ) : null}
+                  <button type="button" role="menuitem" className="ropa-user-item ropa-user-item--exit" onClick={() => runAndClose(onSalir)}>
+                    Salir
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          </>
         ) : (
           // Solo se ve en celular (ver .ropa-header-whatsapp en global.css) --
           // en PC, sin sesion, el header-right queda con el carrito nomas.

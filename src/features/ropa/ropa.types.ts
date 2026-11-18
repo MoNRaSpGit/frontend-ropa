@@ -58,4 +58,6 @@ export type RopaProduct = {
   // Orden manual en el catalogo.
   position: number;
   createdAt: string;
+  // Fotos extra (otros angulos) que se pasan en el detalle (17/11/2026).
+  gallery?: Array<{ id: number; url: string }>;
 };
