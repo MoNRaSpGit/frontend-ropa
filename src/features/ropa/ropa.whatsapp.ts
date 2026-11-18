@@ -4,7 +4,7 @@ import { getSizeLabel, getUnitPrice } from "./ropa.pricing";
 
 // Numero de WhatsApp de la tienda: PROVISORIO, cambiar por el real de la
 // clienta (formato libre; se normaliza a internacional con prefijo 598).
-const WHATSAPP_RAW_NUMBER = "092 107 996";
+const WHATSAPP_RAW_NUMBER = "092 107 966";
 
 export function toWhatsAppNumber(raw: string): string {
   const digits = raw.replace(/\D/g, "");
