@@ -25,7 +25,6 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
   const isEditing = Boolean(product);
   const [name, setName] = useState(product?.name ?? "");
   const [price, setPrice] = useState(product ? String(product.price) : "");
-  const [sizesText, setSizesText] = useState(product?.sizes?.join(", ") ?? "");
   const [category, setCategory] = useState(product?.category ?? "");
   const [description, setDescription] = useState(product?.description ?? "");
   const [imagePreview, setImagePreview] = useState<string | null>(product ? getProductImageSrc(product) : null);
@@ -88,10 +87,9 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
     event.preventDefault();
 
     const priceNum = Number(price.trim());
-    const sizes = Array.from(new Set(sizesText.split(",").map((item) => item.trim().toUpperCase()).filter(Boolean)));
 
     if (!name.trim()) {
-      setError("Ingresá el nombre de la prenda.");
+      setError("Ingresá el nombre del producto.");
       return;
     }
     if (!price.trim() || !Number.isFinite(priceNum) || priceNum < 0) {
@@ -109,7 +107,6 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
       const common = {
         name: name.trim(),
         currency: "UYU",
-        sizes,
         category,
         description: description.trim() || undefined
       };
@@ -158,11 +155,10 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
                 {imagePreview ? "Cambiar imagen" : "Elegir imagen"}
               </button>
             </div>
-            <small>
+            <small className="ropa-size-line">
               <strong>
-                Medida: {PRODUCT_IMAGE_SIZE.width} × {PRODUCT_IMAGE_SIZE.height} px (vertical, 4 a 5)
+                Medidas de producto ({PRODUCT_IMAGE_SIZE.width} x {PRODUCT_IMAGE_SIZE.height} px) (4A5)
               </strong>
-              . Producto grande y centrado, nada importante pegado a los bordes.
             </small>
           </label>
 
@@ -189,10 +185,9 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
                   </>
                 ) : null}
               </div>
-              <small>Se pasan dentro del producto, como un carrusel. Se suben al instante, no hace falta guardar.</small>
             </div>
           ) : (
-            <p className="ropa-hint">Guardá el producto y después, desde "Editar", podés sumarle más fotos (otros ángulos).</p>
+            <p className="ropa-hint">Las fotos extra se suman al editar el producto.</p>
           )}
 
           <label className="ropa-field">
@@ -222,12 +217,6 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
           <label className="ropa-field">
             <span>Precio ($)</span>
             <input type="number" step="1" min="0" inputMode="decimal" value={price} onChange={(event) => setPrice(event.target.value)} />
-          </label>
-
-          <label className="ropa-field">
-            <span>Talles (separados por coma, opcional)</span>
-            <input type="text" value={sizesText} onChange={(event) => setSizesText(event.target.value)} placeholder="Ej: S, M, L, XL" />
-            <small>Si no ponés ninguno, la prenda se agrega al carrito sin pedir talle.</small>
           </label>
 
           <label className="ropa-field">

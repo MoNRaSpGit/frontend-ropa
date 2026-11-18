@@ -180,4 +180,8 @@
   cursor: not-allowed;
 }
 
-
+/* Mensaje de medidas del producto: siempre en UN renglon (17/11/2026). */
+.ropa-size-line strong {
+  white-space: nowrap;
+  font-size: clamp(11px, 3.4vw, 13px);
+}

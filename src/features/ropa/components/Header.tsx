@@ -4,7 +4,7 @@ import type { RopaSession } from "../ropa.session";
 import { trackEvent } from "../ropa.track";
 import { buildWhatsAppHref } from "../ropa.whatsapp";
 
-const HEADER_WHATSAPP_HREF = buildWhatsAppHref("Hola! Quiero consultar por una prenda.");
+const HEADER_WHATSAPP_HREF = buildWhatsAppHref("Hola! Quiero consultar por un producto.");
 
 type HeaderProps = {
   session: RopaSession | null;

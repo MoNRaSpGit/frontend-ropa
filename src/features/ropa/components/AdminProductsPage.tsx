@@ -95,7 +95,7 @@ export function AdminProductsPage({ products, isLoading, error, onNuevo, onEdita
                 <span className="ropa-admin-row-name">{product.name}</span>
                 <span className="ropa-admin-row-meta">
                   {getCategoryLabel(product.category) || "Sin categoría"} ·{" "}
-                  ${getUnitPrice(product).toFixed(0)}{product.sizes.length ? ` · Talles ${product.sizes.join(", ")}` : ""}
+                  ${getUnitPrice(product).toFixed(0)}
                 </span>
               </div>
 

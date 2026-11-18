@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { getProductImageSrc } from "../ropa.client";
-import { getProductSizes, getUnitPrice, type RopaSize } from "../ropa.pricing";
+import { getUnitPrice, type RopaSize } from "../ropa.pricing";
 import { getCategoryLabel } from "../ropa.genres";
 import { getProductTheme } from "../ropa.theme";
 import type { RopaProduct } from "../ropa.types";
@@ -27,10 +26,7 @@ type ProductDetailModalProps = {
 // selecciona el que quiere". Si solo tiene uno cargado, se usa ese
 // directo, sin pedir que elija nada.
 export function ProductDetailModal({ product, isAdmin, onCerrar, onAgregarAlCarrito, onEditar, onEliminar }: ProductDetailModalProps) {
-  const sizes = getProductSizes(product);
   const [quantity, setQuantity] = useState(1);
-  // Si el producto tiene talles hay que elegir uno; si no, se agrega directo.
-  const [selectedSize, setSelectedSize] = useState<RopaSize | null>(sizes.length === 0 ? "" : sizes.length === 1 ? sizes[0] : null);
   const [confirmandoEliminar, setConfirmandoEliminar] = useState(false);
   const theme = getProductTheme(product);
   const imageSrc = getProductImageSrc(product);
@@ -50,7 +46,6 @@ export function ProductDetailModal({ product, isAdmin, onCerrar, onAgregarAlCarr
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [slides.length]);
-  const needsSizeChoice = sizes.length > 1;
 
   return (
     <div className="ropa-modal-overlay" onClick={onCerrar}>
@@ -113,26 +108,6 @@ export function ProductDetailModal({ product, isAdmin, onCerrar, onAgregarAlCarr
             </div>
           </div>
 
-          {needsSizeChoice ? (
-            <>
-              {selectedSize === null ? <p className="ropa-hint ropa-detail-variant-hint">Elegí tu talle para poder agregarlo.</p> : null}
-              <div className="ropa-detail-variant-picker" role="radiogroup" aria-label="Elegí tu talle">
-                {sizes.map((size) => (
-                  <button
-                    key={size}
-                    type="button"
-                    role="radio"
-                    aria-checked={selectedSize === size}
-                    className={selectedSize === size ? "ropa-detail-variant-option is-selected" : "ropa-detail-variant-option"}
-                    onClick={() => setSelectedSize(size)}
-                  >
-                    <span className="ropa-detail-variant-amount">{size}</span>
-                  </button>
-                ))}
-              </div>
-            </>
-          ) : null}
-
           {confirmandoEliminar ? (
             <div className="ropa-confirm-delete">
               <p>¿Eliminar "{product.name}"? No se puede deshacer.</p>
@@ -159,14 +134,8 @@ export function ProductDetailModal({ product, isAdmin, onCerrar, onAgregarAlCarr
                 </div>
                 <button
                   type="button"
-                  className={selectedSize !== null ? "ropa-button ropa-button--primary ropa-detail-add" : "ropa-button ropa-button--primary ropa-detail-add is-blocked"}
-                  onClick={() => {
-                    if (selectedSize === null) {
-                      toast.error("Elegí tu talle antes de agregarlo.");
-                      return;
-                    }
-                    onAgregarAlCarrito(product, selectedSize, quantity);
-                  }}
+                  className="ropa-button ropa-button--primary ropa-detail-add"
+                  onClick={() => onAgregarAlCarrito(product, "", quantity)}
                 >
                   Agregar al carrito
                 </button>

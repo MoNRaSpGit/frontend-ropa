@@ -36,5 +36,5 @@ export function buildCartWhatsAppMessage(items: RopaCartItem[], discount?: { cod
     return `Subtotal: ${moneda}${total.toFixed(0)}\nDescuento (código ${discount.code.toUpperCase()}, ${discount.percentage}%)\nTotal con descuento: ${moneda}${withDiscount.toFixed(0)}`;
   });
 
-  return ["Hola! Me gustaría comprar estas prendas:", "", ...lines, "", ...totalLines].join("\n");
+  return ["Hola! Me gustaría comprar estos productos:", "", ...lines, "", ...totalLines].join("\n");
 }
