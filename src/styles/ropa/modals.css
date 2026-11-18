@@ -183,3 +183,11 @@
   align-self: flex-start;
   margin-top: 8px;
 }
+
+/* Los dos botones de prompt (crear / arreglar), uno al lado del otro (17/11/2026) */
+.ropa-prompt-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}

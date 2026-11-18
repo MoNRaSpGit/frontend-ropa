@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { addCarouselImage, deleteCarouselImage, getCarouselImageSrc } from "../ropa.client";
 import { CAROUSEL_SIZE, prepareCarouselImage } from "../ropa.imageResize";
+import { CAROUSEL_CREATE_PROMPT, CAROUSEL_FIX_PROMPT } from "../ropa.prompts";
 import type { RopaCarouselImage } from "../ropa.types";
 
 type AdminCarouselPageProps = {
@@ -13,27 +14,14 @@ type AdminCarouselPageProps = {
   onEliminada: (imageId: number) => void;
 };
 
-// Prompt para que la clienta genere el banner con su IA (17/11/2026): UNA sola
-// medida que se ve bien en celular y en PC. En PC se ve entera; en celular se
-// recortan un poco los costados, por eso lo importante va al centro.
-const AI_PROMPT = `Necesito un banner publicitario para el carrusel de la tienda online Armii Creaciones Alexa (accesorios y regalos personalizados).
-
-Medidas exactas: ${CAROUSEL_SIZE.width} x ${CAROUSEL_SIZE.height} píxeles (una franja horizontal, proporción 4:1).
-
-Cómo tiene que ser:
-- La misma imagen se ve en el celular y en la computadora. En la compu se ve casi entera; en el celular se recortan los COSTADOS. Por eso TODO lo importante (título, frase, producto, logo) tiene que estar CENTRADO, dentro del 45% central del ancho (entre los píxeles 440 y 1160).
-- Los costados y las ESQUINAS tienen que quedar libres: nada de letras, logos ni imágenes ahí. Solo fondo, color o una decoración suave que se pueda cortar sin problema.
-- Dejá al menos 30 px libres arriba y abajo: ningún texto pegado al borde.
-- Un título corto y bien grande (2 a 5 palabras) y, como mucho, una frase breve. En el celular la imagen se ve chica: nada de letra chica.
-- Estilo de la tienda: rosa pastel, femenino, limpio y moderno. Buen contraste entre el texto y el fondo para que se lea.
-- Sin marcos ni bordes blancos: la imagen ocupa todo el lienzo.
-
-Tema del banner: [ESCRIBÍ ACÁ DE QUÉ ES: ej. "Chupeteros personalizados", "Día de la madre", "Envío gratis"]`;
-
-async function copyPrompt() {
+async function copyPrompt(kind: "crear" | "arreglar") {
   try {
-    await navigator.clipboard.writeText(AI_PROMPT);
-    toast.success("Prompt copiado. Pegalo en tu IA y completá el tema.");
+    await navigator.clipboard.writeText(kind === "crear" ? CAROUSEL_CREATE_PROMPT : CAROUSEL_FIX_PROMPT);
+    toast.success(
+      kind === "crear"
+        ? "Prompt copiado. Pegalo en tu IA y completá el tema."
+        : "Prompt copiado. Pegalo en tu IA, adjuntá tu banner y completá el tema."
+    );
   } catch {
     toast.error("No se pudo copiar. Probá de nuevo.");
   }
@@ -102,9 +90,17 @@ export function AdminCarouselPage({ token, images, isLoading, error, onAgregada,
           La misma imagen se ve en celular y en PC. Todo lo importante tiene que ir CENTRADO (en el 45% del medio): en el celular se recortan los
           costados, así que nada de letras ni imágenes en los costados ni en las esquinas.
         </span>
-        <button type="button" className="ropa-button ropa-button--ghost" onClick={() => void copyPrompt()}>
-          Copiar prompt para IA
-        </button>
+        <div className="ropa-prompt-buttons">
+          <button type="button" className="ropa-button ropa-button--ghost" onClick={() => void copyPrompt("crear")}>
+            Prompt: crear imagen
+          </button>
+          <button type="button" className="ropa-button ropa-button--ghost" onClick={() => void copyPrompt("arreglar")}>
+            Prompt: arreglar mi banner
+          </button>
+        </div>
+        <span>
+          <strong>Crear</strong>: la IA hace un banner nuevo. <strong>Arreglar</strong>: adjuntás tu propio banner a la IA y ella lo adapta a esta medida, sin cambiar el diseño.
+        </span>
       </div>
 
       {problema ? <p className="ropa-error">{problema}</p> : null}
