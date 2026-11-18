@@ -80,7 +80,9 @@
 
 .ropa-card-media {
   position: relative;
-  aspect-ratio: 1 / 1;
+  /* 17/11/2026: tarjeta VERTICAL tipo Instagram (4 a 5) en vez de cuadrada, asi
+     las fotos verticales de celular / Instagram la llenan casi enteras. */
+  aspect-ratio: 4 / 5;
   border-radius: var(--radius);
   background: linear-gradient(160deg, #fbd5e3, #f4b6cc);
   overflow: hidden;
@@ -98,7 +100,7 @@
   width: 100%;
   height: 100%;
   /* 17/11/2026: la foto se ve ENTERA, tal cual la subio la admin (sin recorte ni
-     relleno difuminado). Si no es cuadrada, quedan franjas del fondo rosa. */
+     relleno difuminado). Si no es 4 a 5, quedan franjas del fondo rosa. */
   object-fit: contain;
   display: block;
 }

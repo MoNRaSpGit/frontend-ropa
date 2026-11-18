@@ -158,7 +158,7 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
                 {imagePreview ? "Cambiar imagen" : "Elegir imagen"}
               </button>
             </div>
-            <small>Mejor cuadrada (1000 × 1000 px) y con el producto grande y centrado. Se muestra tal cual la subís.</small>
+            <small>Mejor vertical, formato Instagram 4 a 5 (1080 × 1350 px), con el producto grande y centrado. Se muestra tal cual la subís.</small>
           </label>
 
           {isEditing ? (

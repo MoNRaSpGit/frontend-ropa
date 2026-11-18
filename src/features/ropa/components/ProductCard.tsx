@@ -7,7 +7,7 @@ type ProductCardProps = {
   onClick?: (product: RopaProduct) => void;
 };
 
-// Tarjeta cuadrada, solo imagen -- nada de precio ni categoria aca (eso
+// Tarjeta vertical 4:5 (formato Instagram), solo imagen -- nada de precio ni categoria aca (eso
 // vive en el detalle, al hacer click). Pedido explicito (15/09/2026): el
 // nombre del producto ya no se muestra en la tarjeta cuando hay una foto
 // real subida -- el nombre ya viene "dibujado" en esa imagen (es un

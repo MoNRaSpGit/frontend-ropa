@@ -45,7 +45,10 @@
 }
 
 .ropa-detail-media {
-  aspect-ratio: 4 / 3;
+  /* Vertical como la tarjeta (4 a 5), con tope de alto para que no ocupe todo
+     el celular: las fotos verticales se ven grandes y las horizontales enteras. */
+  aspect-ratio: 4 / 5;
+  max-height: 62vh;
   background: linear-gradient(160deg, #fbd5e3, #f4b6cc);
   display: flex;
   align-items: center;

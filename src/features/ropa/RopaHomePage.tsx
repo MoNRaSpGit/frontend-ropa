@@ -54,7 +54,7 @@ import type { RopaCarouselImage, RopaClient, RopaDiscountConfig, RopaProduct } f
 // medio + tarjetas de producto debajo, mismo espiritu visual que Netflix
 // (buscador arriba, grilla de tarjetas abajo). Se le suma el header
 // (marca, nav, ingresar) y el login/registro (15/09/2026), y despues
-// tarjeta cuadrada + detalle al click + carrito + WhatsApp flotante
+// tarjeta vertical 4:5 (antes cuadrada) + detalle al click + carrito + WhatsApp flotante
 // (15/09/2026) -- el resto de las pantallas (editar producto, Blog,
 // Contacto reales) se suman despues.
 export function RopaHomePage() {
@@ -523,7 +523,7 @@ export function RopaHomePage() {
                         <path d="M12 7v2l9 5.5a1.2 1.2 0 0 1-.6 2.2H3.6A1.2 1.2 0 0 1 3 14.5L12 9" />
                       </svg>
                       <span>Foto del producto</span>
-                      <span className="ropa-card-sample-size">640 × 640 px</span>
+                      <span className="ropa-card-sample-size">1080 × 1350 px</span>
                     </div>
                   </div>
                 ))}
