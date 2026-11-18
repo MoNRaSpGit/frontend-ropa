@@ -1,6 +1,7 @@
 import { getProductImageSrc } from "../ropa.client";
 import { getProductTheme } from "../ropa.theme";
 import type { RopaProduct } from "../ropa.types";
+import { AdaptiveImage } from "./AdaptiveImage";
 
 type ProductCardProps = {
   product: RopaProduct;
@@ -22,7 +23,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
     <button type="button" className="ropa-card" onClick={() => onClick?.(product)}>
       <div className="ropa-card-media" style={imageSrc ? undefined : { background: theme.gradient }}>
         {imageSrc ? (
-          <img src={imageSrc} alt={product.name} loading="lazy" />
+          <AdaptiveImage src={imageSrc} alt={product.name} loading="lazy" />
         ) : (
           <span className="ropa-card-name-overlay" style={{ color: theme.textColor }}>
             {product.name}

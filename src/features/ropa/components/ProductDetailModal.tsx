@@ -5,6 +5,7 @@ import { getProductSizes, getUnitPrice, type RopaSize } from "../ropa.pricing";
 import { getCategoryLabel } from "../ropa.genres";
 import { getProductTheme } from "../ropa.theme";
 import type { RopaProduct } from "../ropa.types";
+import { AdaptiveImage } from "./AdaptiveImage";
 
 type ProductDetailModalProps = {
   product: RopaProduct;
@@ -70,7 +71,7 @@ export function ProductDetailModal({ product, isAdmin, onCerrar, onAgregarAlCarr
           }}
         >
           {slides.length > 0 ? (
-            <img src={slides[slideIndex]} alt={`${product.name} (foto ${slideIndex + 1} de ${slides.length})`} />
+            <AdaptiveImage key={slides[slideIndex]} src={slides[slideIndex]} alt={`${product.name} (foto ${slideIndex + 1} de ${slides.length})`} />
           ) : (
             <span className="ropa-detail-media-wordmark" style={{ color: theme.textColor }}>
               {product.name}

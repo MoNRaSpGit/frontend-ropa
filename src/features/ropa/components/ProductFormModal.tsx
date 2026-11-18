@@ -4,6 +4,7 @@ import { addProductGalleryImage, createProduct, deleteProductGalleryImage, getPr
 import { buildCategoryGroups } from "../ropa.categories";
 import { useRopaGenres } from "../ropa.genres";
 import { resizeImageFile } from "../ropa.imageResize";
+import { PRODUCT_AI_PROMPT, PRODUCT_IMAGE_SIZE } from "../ropa.prompts";
 import type { RopaProduct } from "../ropa.types";
 
 type ProductFormModalProps = {
@@ -38,6 +39,15 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
   const [gallery, setGallery] = useState(product?.gallery ?? []);
   const [galleryBusy, setGalleryBusy] = useState(false);
   const galleryInputRef = useRef<HTMLInputElement>(null);
+
+  async function copyProductPrompt() {
+    try {
+      await navigator.clipboard.writeText(PRODUCT_AI_PROMPT);
+      toast.success("Prompt copiado. Pegalo en tu IA y completá qué producto es.");
+    } catch {
+      toast.error("No se pudo copiar. Probá de nuevo.");
+    }
+  }
 
   async function handleGalleryFile(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -158,7 +168,13 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
                 {imagePreview ? "Cambiar imagen" : "Elegir imagen"}
               </button>
             </div>
-            <small>Mejor vertical, formato Instagram 4 a 5 (1080 × 1350 px), con el producto grande y centrado. Se muestra tal cual la subís.</small>
+            <small>
+              Mejor vertical, formato Instagram: {PRODUCT_IMAGE_SIZE.width} × {PRODUCT_IMAGE_SIZE.height} px (4 a 5), con el producto grande y centrado y nada
+              importante pegado a los bordes.
+            </small>
+            <button type="button" className="ropa-button ropa-button--ghost ropa-prompt-button" onClick={() => void copyProductPrompt()}>
+              Copiar prompt para IA
+            </button>
           </label>
 
           {isEditing ? (

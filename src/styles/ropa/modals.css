@@ -177,3 +177,9 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Boton "Copiar prompt para IA" del formulario de producto (17/11/2026) */
+.ropa-prompt-button {
+  align-self: flex-start;
+  margin-top: 8px;
+}
