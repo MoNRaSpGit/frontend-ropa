@@ -69,13 +69,9 @@ export function AdminCarouselPage({ token, images, isLoading, error, onAgregada,
       </div>
 
       <div className="ropa-carousel-size">
-        <strong>
-          Medida del carrusel: {CAROUSEL_SIZE.width} × {CAROUSEL_SIZE.height} px (4 a 1)
+        <strong className="ropa-carousel-size-line">
+          Medidas de carrusel ({CAROUSEL_SIZE.width} x {CAROUSEL_SIZE.height} px) (4A1)
         </strong>
-        <span>
-          También sirve más finita, hasta 1600 × 250. Es la misma imagen para celular y PC: todo lo importante tiene que ir CENTRADO (en el 45% del
-          medio); en el celular se recortan los costados, así que nada de letras ni imágenes en los costados ni en las esquinas.
-        </span>
       </div>
 
       {problema ? <p className="ropa-error">{problema}</p> : null}

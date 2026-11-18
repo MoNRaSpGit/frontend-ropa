@@ -261,3 +261,9 @@
     object-position: center;
   }
 }
+
+/* Mensaje de medidas del carrusel: siempre en UN renglon (17/11/2026). */
+.ropa-carousel-size-line {
+  white-space: nowrap;
+  font-size: clamp(12px, 3.8vw, 15px);
+}
