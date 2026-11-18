@@ -19,6 +19,8 @@ export function AdminCategoriesPage({ token }: AdminCategoriesPageProps) {
   const [editingLabel, setEditingLabel] = useState("");
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
+  // Celular: el campo de "nueva subcategoria" aparece solo al tocar el boton del grupo.
+  const [openSubId, setOpenSubId] = useState<number | null>(null);
 
   async function reload() {
     setRopaGenres(await listCategories());
@@ -54,6 +56,7 @@ export function AdminCategoriesPage({ token }: AdminCategoriesPageProps) {
     void run(async () => {
       await createCategory(token, label, parentId);
       setNewSubLabels((current) => ({ ...current, [parentId]: "" }));
+      setOpenSubId(null);
     }, "Subcategoría agregada.");
   }
 
@@ -76,7 +79,7 @@ export function AdminCategoriesPage({ token }: AdminCategoriesPageProps) {
     if (id === undefined) return null;
     const isEditing = editingId === id;
     return (
-      <div className={extra === "sub" ? "ropa-cat-row ropa-cat-row--sub" : "ropa-cat-row"} key={id}>
+      <div className={`ropa-cat-row${extra === "sub" ? " ropa-cat-row--sub" : ""}${isEditing || confirmDeleteId === id ? " ropa-cat-row--busy" : ""}`} key={id}>
         {isEditing ? (
           <input
             className="ropa-cat-input"
@@ -129,11 +132,17 @@ export function AdminCategoriesPage({ token }: AdminCategoriesPageProps) {
               <button type="button" className="ropa-cat-icon" disabled={busy || isLast} aria-label="Bajar" onClick={() => void run(() => moveCategory(token, id, "down"))}>
                 ↓
               </button>
-              <button type="button" className="ropa-button ropa-button--ghost" onClick={() => startEdit(id, label)}>
-                Renombrar
+              <button type="button" className="ropa-button ropa-button--ghost ropa-cat-text-button" aria-label="Renombrar" onClick={() => startEdit(id, label)}>
+                <span className="ropa-cat-btn-text">Renombrar</span>
+                <span className="ropa-cat-btn-icon" aria-hidden="true">
+                  ✎
+                </span>
               </button>
-              <button type="button" className="ropa-button ropa-button--ghost" onClick={() => setConfirmDeleteId(id)}>
-                Borrar
+              <button type="button" className="ropa-button ropa-button--ghost ropa-cat-text-button" aria-label="Borrar" onClick={() => setConfirmDeleteId(id)}>
+                <span className="ropa-cat-btn-text">Borrar</span>
+                <span className="ropa-cat-btn-icon" aria-hidden="true">
+                  🗑
+                </span>
               </button>
             </>
           )}
@@ -174,7 +183,15 @@ export function AdminCategoriesPage({ token }: AdminCategoriesPageProps) {
               renderRow(sub.id, sub.label, subIndex === 0, subIndex === genre.subcategories.length - 1, "sub")
             )}
             {genre.id !== undefined ? (
-              <form className="ropa-cat-add ropa-cat-add--sub" onSubmit={(event) => handleAddSub(event, genre.id as number)}>
+              <>
+              <button
+                type="button"
+                className="ropa-button ropa-button--ghost ropa-cat-add-toggle"
+                onClick={() => setOpenSubId(openSubId === genre.id ? null : (genre.id as number))}
+              >
+                {openSubId === genre.id ? "Cancelar" : "+ Subcategoría"}
+              </button>
+              <form className={`ropa-cat-add ropa-cat-add--sub${openSubId === genre.id ? " is-open" : ""}`} onSubmit={(event) => handleAddSub(event, genre.id as number)}>
                 <input
                   className="ropa-cat-input"
                   value={newSubLabels[genre.id] ?? ""}
@@ -190,6 +207,7 @@ export function AdminCategoriesPage({ token }: AdminCategoriesPageProps) {
                   + Subcategoría
                 </button>
               </form>
+              </>
             ) : null}
           </section>
         ))}

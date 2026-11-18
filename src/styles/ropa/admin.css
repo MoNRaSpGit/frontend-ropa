@@ -268,3 +268,109 @@
   opacity: 0.35;
   cursor: default;
 }
+
+/* Categorias: formato simple para celular (17/11/2026). En PC no cambia nada. */
+.ropa-cat-btn-icon,
+.ropa-cat-add-toggle {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .ropa-cat-list {
+    gap: 12px;
+  }
+
+  .ropa-cat-group {
+    padding: 4px 10px 10px;
+  }
+
+  /* Cada fila en UN solo renglon: nombre a la izquierda, botones chicos a la derecha. */
+  .ropa-cat-row {
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(150, 70, 100, 0.1);
+  }
+
+  .ropa-cat-group .ropa-cat-row:last-of-type {
+    border-bottom: none;
+  }
+
+  .ropa-cat-label {
+    flex: 1;
+    min-width: 0;
+    font-size: 15px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+  }
+
+  .ropa-cat-row--sub {
+    padding-left: 12px;
+    border-left: 3px solid rgba(233, 138, 171, 0.5);
+    margin: 4px 0 0 4px;
+    border-bottom: none;
+  }
+
+  .ropa-cat-row--sub .ropa-cat-label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .ropa-cat-actions {
+    flex: none;
+    gap: 4px;
+    flex-wrap: nowrap;
+  }
+
+  /* Botones de accion: iconos redondos de 34px en vez de texto. */
+  .ropa-cat-icon,
+  .ropa-cat-text-button {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    padding: 0;
+    border-radius: 999px;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ropa-cat-btn-text {
+    display: none;
+  }
+
+  .ropa-cat-btn-icon {
+    display: inline;
+  }
+
+  /* Editando o confirmando un borrado: la fila se acomoda en varios renglones. */
+  .ropa-cat-row--busy {
+    flex-wrap: wrap;
+  }
+
+  .ropa-cat-row--busy .ropa-cat-input,
+  .ropa-cat-row--busy .ropa-cat-actions {
+    flex: 1 1 100%;
+  }
+
+  .ropa-cat-row--busy .ropa-cat-actions {
+    flex-wrap: wrap;
+  }
+
+  /* "Nueva subcategoria": escondida hasta tocar el boton del grupo. */
+  .ropa-cat-add-toggle {
+    display: inline-flex;
+    margin: 8px 0 0 4px;
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+
+  .ropa-cat-add--sub:not(.is-open) {
+    display: none;
+  }
+
+  .ropa-cat-add--sub {
+    margin: 8px 0 0 0;
+  }
+}
