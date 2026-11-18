@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { addCarouselImage, deleteCarouselImage, getCarouselImageSrc } from "../ropa.client";
 import { CAROUSEL_SIZE, prepareCarouselImage } from "../ropa.imageResize";
-import { CAROUSEL_CREATE_PROMPT, CAROUSEL_FIX_PROMPT } from "../ropa.prompts";
 import type { RopaCarouselImage } from "../ropa.types";
 
 type AdminCarouselPageProps = {
@@ -13,19 +12,6 @@ type AdminCarouselPageProps = {
   onAgregada: (image: RopaCarouselImage) => void;
   onEliminada: (imageId: number) => void;
 };
-
-async function copyPrompt(kind: "crear" | "arreglar") {
-  try {
-    await navigator.clipboard.writeText(kind === "crear" ? CAROUSEL_CREATE_PROMPT : CAROUSEL_FIX_PROMPT);
-    toast.success(
-      kind === "crear"
-        ? "Prompt copiado. Pegalo en tu IA y completá el tema."
-        : "Prompt copiado. Pegalo en tu IA, adjuntá tu banner y completá el tema."
-    );
-  } catch {
-    toast.error("No se pudo copiar. Probá de nuevo.");
-  }
-}
 
 // Pestaña "Carrusel" del admin: una sola subida. La misma imagen se ve en el
 // celular y en la PC. Antes de subirla se revisa la forma (4 a 1): si no
@@ -84,22 +70,11 @@ export function AdminCarouselPage({ token, images, isLoading, error, onAgregada,
 
       <div className="ropa-carousel-size">
         <strong>
-          Medida: {CAROUSEL_SIZE.width} × {CAROUSEL_SIZE.height} px (4 a 1). También sirve más finita, hasta 1600 × 250.
+          Medida del carrusel: {CAROUSEL_SIZE.width} × {CAROUSEL_SIZE.height} px (4 a 1)
         </strong>
         <span>
-          La misma imagen se ve en celular y en PC. Todo lo importante tiene que ir CENTRADO (en el 45% del medio): en el celular se recortan los
-          costados, así que nada de letras ni imágenes en los costados ni en las esquinas.
-        </span>
-        <div className="ropa-prompt-buttons">
-          <button type="button" className="ropa-button ropa-button--ghost" onClick={() => void copyPrompt("crear")}>
-            Prompt: crear imagen
-          </button>
-          <button type="button" className="ropa-button ropa-button--ghost" onClick={() => void copyPrompt("arreglar")}>
-            Prompt: arreglar mi banner
-          </button>
-        </div>
-        <span>
-          <strong>Crear</strong>: la IA hace un banner nuevo. <strong>Arreglar</strong>: adjuntás tu propio banner a la IA y ella lo adapta a esta medida, sin cambiar el diseño.
+          También sirve más finita, hasta 1600 × 250. Es la misma imagen para celular y PC: todo lo importante tiene que ir CENTRADO (en el 45% del
+          medio); en el celular se recortan los costados, así que nada de letras ni imágenes en los costados ni en las esquinas.
         </span>
       </div>
 

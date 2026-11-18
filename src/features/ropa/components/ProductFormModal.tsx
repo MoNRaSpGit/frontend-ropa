@@ -3,8 +3,7 @@ import { toast } from "react-toastify";
 import { addProductGalleryImage, createProduct, deleteProductGalleryImage, getProductImageSrc, updateProduct, uploadProductImage } from "../ropa.client";
 import { buildCategoryGroups } from "../ropa.categories";
 import { useRopaGenres } from "../ropa.genres";
-import { resizeImageFile } from "../ropa.imageResize";
-import { PRODUCT_CREATE_PROMPT, PRODUCT_FIX_PROMPT, PRODUCT_IMAGE_SIZE } from "../ropa.prompts";
+import { PRODUCT_IMAGE_SIZE, resizeImageFile } from "../ropa.imageResize";
 import type { RopaProduct } from "../ropa.types";
 
 type ProductFormModalProps = {
@@ -39,19 +38,6 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
   const [gallery, setGallery] = useState(product?.gallery ?? []);
   const [galleryBusy, setGalleryBusy] = useState(false);
   const galleryInputRef = useRef<HTMLInputElement>(null);
-
-  async function copyProductPrompt(kind: "crear" | "arreglar") {
-    try {
-      await navigator.clipboard.writeText(kind === "crear" ? PRODUCT_CREATE_PROMPT : PRODUCT_FIX_PROMPT);
-      toast.success(
-        kind === "crear"
-          ? "Prompt copiado. Pegalo en tu IA y completá qué producto es."
-          : "Prompt copiado. Pegalo en tu IA, adjuntá tu foto y completá qué producto es."
-      );
-    } catch {
-      toast.error("No se pudo copiar. Probá de nuevo.");
-    }
-  }
 
   async function handleGalleryFile(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -173,19 +159,10 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
               </button>
             </div>
             <small>
-              Mejor vertical, formato Instagram: {PRODUCT_IMAGE_SIZE.width} × {PRODUCT_IMAGE_SIZE.height} px (4 a 5), con el producto grande y centrado y nada
-              importante pegado a los bordes.
-            </small>
-            <div className="ropa-prompt-buttons">
-              <button type="button" className="ropa-button ropa-button--ghost" onClick={() => void copyProductPrompt("crear")}>
-                Prompt: crear imagen
-              </button>
-              <button type="button" className="ropa-button ropa-button--ghost" onClick={() => void copyProductPrompt("arreglar")}>
-                Prompt: arreglar mi foto
-              </button>
-            </div>
-            <small>
-              <strong>Crear</strong>: la IA hace una imagen nueva. <strong>Arreglar</strong>: adjuntás tu propia foto a la IA y ella la adapta a esta medida sin cambiar el producto.
+              <strong>
+                Medida: {PRODUCT_IMAGE_SIZE.width} × {PRODUCT_IMAGE_SIZE.height} px (vertical, 4 a 5)
+              </strong>
+              . Producto grande y centrado, nada importante pegado a los bordes.
             </small>
           </label>
 

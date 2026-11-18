@@ -7,6 +7,8 @@
 // eso producia los costados difuminados en tarjetas y carrusel. Ahora solo se
 // achica si es mas grande de lo necesario y se comprime; nada se recorta, se
 // rellena ni se desenfoca. La forma de mostrarla la resuelve el CSS.
+// Medida recomendada de las fotos de producto: vertical, formato Instagram 4 a 5.
+export const PRODUCT_IMAGE_SIZE = { width: 1080, height: 1350 } as const;
 const PRODUCT_MAX_SIDE = 1280;
 const PRODUCT_JPEG_QUALITY = 0.85;
 
