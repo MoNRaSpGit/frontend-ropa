@@ -16,5 +16,5 @@ export function getUnitPrice(product: Pick<RopaProduct, "price">): number {
 }
 
 export function getSizeLabel(size: RopaSize): string {
-  return size ? `Talle ${size}` : "";
+  return size;
 }
