@@ -29,7 +29,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
             {product.name}
           </span>
         )}
-        {product.featured ? <span className="ropa-featured-tag">⭐ Producto destacado</span> : null}
+        {product.featured ? <span className="ropa-featured-tag">⭐ Destacado</span> : null}
       </div>
     </button>
   );
