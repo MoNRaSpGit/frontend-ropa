@@ -131,3 +131,25 @@
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
+
+/* Etiqueta "Producto destacado" (18/11/2026). */
+.ropa-featured-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #a8456f;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.ropa-featured-tag--inline {
+  position: static;
+  display: inline-block;
+  margin-bottom: 6px;
+}

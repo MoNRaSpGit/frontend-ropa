@@ -50,6 +50,7 @@ export async function createProduct(
     imageUrl?: string;
     category?: string;
     status?: RopaProductStatus;
+    featured?: boolean;
   }
 ) {
   const response = await fetch(buildUrl("/ropa/products"), {
@@ -73,6 +74,7 @@ export async function updateProduct(
     imageUrl: string;
     category: string;
     status: RopaProductStatus;
+    featured: boolean;
   }>
 ) {
   const response = await fetch(buildUrl(`/ropa/products/${productId}`), {

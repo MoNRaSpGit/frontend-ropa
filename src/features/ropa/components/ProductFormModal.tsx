@@ -27,6 +27,7 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
   const [price, setPrice] = useState(product ? String(product.price) : "");
   const [category, setCategory] = useState(product?.category ?? "");
   const [description, setDescription] = useState(product?.description ?? "");
+  const [featured, setFeatured] = useState(product?.featured ?? false);
   const [imagePreview, setImagePreview] = useState<string | null>(product ? getProductImageSrc(product) : null);
   const [pendingImageDataUri, setPendingImageDataUri] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
@@ -108,7 +109,8 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
         name: name.trim(),
         currency: "UYU",
         category,
-        description: description.trim() || undefined
+        description: description.trim() || undefined,
+        featured
       };
 
       // En alta, un precio vacio se omite (undefined); en edicion, un
@@ -222,6 +224,12 @@ export function ProductFormModal({ token, product, onCancelar, onGuardado, onPro
           <label className="ropa-field">
             <span>Descripción (opcional)</span>
             <textarea rows={3} value={description} onChange={(event) => setDescription(event.target.value)} />
+          </label>
+
+          {/* "Producto destacado" (18/11/2026): la tarjeta lleva una etiqueta. */}
+          <label className="ropa-check">
+            <input type="checkbox" checked={featured} onChange={(event) => setFeatured(event.target.checked)} />
+            <span>⭐ Producto destacado</span>
           </label>
 
           {error ? <p className="ropa-error">{error}</p> : null}

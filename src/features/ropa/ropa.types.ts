@@ -56,6 +56,7 @@ export type RopaProduct = {
   category: string | null;
   status: RopaProductStatus;
   // Orden manual en el catalogo.
+  featured: boolean;
   position: number;
   createdAt: string;
   // Fotos extra (otros angulos) que se pasan en el detalle (17/11/2026).

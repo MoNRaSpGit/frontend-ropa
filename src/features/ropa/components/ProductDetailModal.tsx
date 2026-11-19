@@ -97,6 +97,7 @@ export function ProductDetailModal({ product, isAdmin, onCerrar, onAgregarAlCarr
         </div>
 
         <div className="ropa-detail-body">
+          {product.featured ? <span className="ropa-featured-tag ropa-featured-tag--inline">⭐ Producto destacado</span> : null}
           <h2>{product.name}</h2>
           {product.category ? <span className="ropa-card-category">{getCategoryLabel(product.category)}</span> : null}
           {product.description ? <p className="ropa-detail-description">{product.description}</p> : null}

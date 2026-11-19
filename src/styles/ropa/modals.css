@@ -185,3 +185,22 @@
   white-space: nowrap;
   font-size: clamp(11px, 3.4vw, 13px);
 }
+
+/* Tilde "Producto destacado" del formulario (18/11/2026). */
+.ropa-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 12px;
+  padding: 10px 12px;
+  border: 1px solid #f0c6d6;
+  border-radius: 12px;
+  background: #fff6f9;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ropa-check input {
+  width: 20px;
+  height: 20px;
+  accent-color: #a8456f;
+}
