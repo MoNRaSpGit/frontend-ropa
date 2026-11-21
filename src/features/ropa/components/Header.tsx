@@ -82,13 +82,17 @@ export function Header({
           cuando no hay sesion -- si ya estas logueado, el logo no hace
           nada (para eso esta "Salir"). */}
       {/* 21/11/2026: logo de la clienta (Armii · Creaciones Alexa) en vez de "Mi Tienda". */}
-      {session ? (
-        <img className="ropa-brand-logo ropa-brand-logo--round" src={import.meta.env.BASE_URL + "armii-logo.jpeg"} alt="Armii · Creaciones Alexa" />
-      ) : (
-        <button type="button" className="ropa-brand-logo-button" onClick={onIngresar} aria-label="Ingresar">
+      {/* 21/11/2026: "Bienvenido" al lado del logo. */}
+      <span className="ropa-brand-welcome">
+        {session ? (
           <img className="ropa-brand-logo ropa-brand-logo--round" src={import.meta.env.BASE_URL + "armii-logo.jpeg"} alt="Armii · Creaciones Alexa" />
-        </button>
-      )}
+        ) : (
+          <button type="button" className="ropa-brand-logo-button" onClick={onIngresar} aria-label="Ingresar">
+            <img className="ropa-brand-logo ropa-brand-logo--round" src={import.meta.env.BASE_URL + "armii-logo.jpeg"} alt="Armii · Creaciones Alexa" />
+          </button>
+        )}
+        <span className="ropa-welcome-text">Bienvenido</span>
+      </span>
 
       <nav className="ropa-nav">
         <button
