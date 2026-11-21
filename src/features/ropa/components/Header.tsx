@@ -91,7 +91,7 @@ export function Header({
             <img className="ropa-brand-logo ropa-brand-logo--round" src={import.meta.env.BASE_URL + "armii-logo.jpeg"} alt="Armii · Creaciones Alexa" />
           </button>
         )}
-        <span className="ropa-welcome-text">Bienvenido</span>
+        <span className="ropa-welcome-text">Bienvenidos</span>
       </span>
 
       <nav className="ropa-nav">
