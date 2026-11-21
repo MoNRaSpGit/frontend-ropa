@@ -113,6 +113,22 @@
   color: var(--color-text-muted);
 }
 
+.ropa-admin-row-code {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary, #d6336c);
+}
+
+.ropa-admin-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  margin: 8px 0 14px;
+  font-size: 16px;
+  border: 1px solid var(--color-border, #e5c9d4);
+  border-radius: 10px;
+}
+
 .ropa-admin-row-actions {
   flex-shrink: 0;
   display: flex;

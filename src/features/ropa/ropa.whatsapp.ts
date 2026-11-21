@@ -23,7 +23,7 @@ export function buildCartWhatsAppMessage(items: RopaCartItem[], discount?: { cod
   const lines = items.map((item) => {
     const subtitle = item.quantity > 1 ? ` x${item.quantity}` : "";
     const size = item.size ? ` (${getSizeLabel(item.size)})` : "";
-    return `- ${item.product.name}${size}${subtitle} ($${getUnitPrice(item.product).toFixed(0)})`;
+    return `- ${item.product.name}${size}${subtitle} ($${getUnitPrice(item.product).toFixed(0)}) · N° ${item.product.id}`;
   });
 
   const totals = getCartTotalsByCurrency(items);

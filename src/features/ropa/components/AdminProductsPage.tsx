@@ -64,7 +64,12 @@ function PositionInput({ product, onReordenar }: { product: RopaProduct; onReord
 // ordena por esa posicion.
 export function AdminProductsPage({ products, isLoading, error, onNuevo, onEditar, onEliminar, onReordenar }: AdminProductsPageProps) {
   const [confirmandoId, setConfirmandoId] = useState<number | null>(null);
-  const sortedProducts = [...products].sort((a, b) => a.position - b.position);
+  const [search, setSearch] = useState("");
+  // Acepta "36", "N° 36" o parte del nombre.
+  const query = search.trim().toLowerCase().replace(/^n[°º]?\s*/, "");
+  const sortedProducts = [...products]
+    .sort((a, b) => a.position - b.position)
+    .filter((product) => !query || String(product.id) === query || product.name.toLowerCase().includes(query));
 
   return (
     <main className="ropa-admin-main">
@@ -83,9 +88,19 @@ export function AdminProductsPage({ products, isLoading, error, onNuevo, onEdita
 
       <p className="ropa-hint">Cambiá el número de posición de una tarjeta para moverla -- la que estaba en ese lugar pasa al de ella.</p>
 
+      <input
+        type="search"
+        className="ropa-admin-search"
+        placeholder="Buscar por N° de producto o nombre (ej: 36)"
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+        aria-label="Buscar producto por número o nombre"
+      />
+
       {error ? <p className="ropa-error ropa-error--center">{error}</p> : null}
       {!error && isLoading ? <p className="ropa-hint">Cargando...</p> : null}
       {!error && !isLoading && products.length === 0 ? <p className="ropa-hint">Todavía no cargaste ningún producto.</p> : null}
+      {!error && !isLoading && products.length > 0 && sortedProducts.length === 0 ? <p className="ropa-hint">No hay ningún producto con ese número o nombre.</p> : null}
 
       <div className="ropa-admin-list">
         {sortedProducts.map((product) => {
@@ -100,6 +115,7 @@ export function AdminProductsPage({ products, isLoading, error, onNuevo, onEdita
 
               <div className="ropa-admin-row-info">
                 <span className="ropa-admin-row-name">{product.name}</span>
+                <span className="ropa-admin-row-code">N° {product.id}</span>
                 <span className="ropa-admin-row-meta">
                   {getCategoryLabel(product.category) || "Sin categoría"} ·{" "}
                   ${getUnitPrice(product).toFixed(0)}
