@@ -379,3 +379,39 @@
     margin: 8px 0 0 0;
   }
 }
+
+/* ---------------- Visitas (21/11/2026) ---------------- */
+.ropa-visits { display: grid; gap: 16px; max-width: 860px; margin: 0 auto; padding: 8px 0 32px; }
+.ropa-visits-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ropa-visits-head h2 { margin: 0; }
+.ropa-visits-periods { display: flex; gap: 6px; padding: 4px; border-radius: 999px; background: var(--color-bg-elevated); border: 1px solid var(--color-border); }
+.ropa-visits-periods button { border: 0; background: transparent; color: var(--color-text-muted); padding: 7px 14px; border-radius: 999px; font-weight: 600; cursor: pointer; }
+.ropa-visits-periods button.is-active { background: var(--color-accent); color: #fff; }
+.ropa-visits-body { display: grid; gap: 16px; transition: opacity 0.2s; }
+.ropa-visits-body.is-loading { opacity: 0.5; }
+.ropa-visits-error { color: var(--color-danger); margin: 0; }
+.ropa-visits-hero { display: grid; justify-items: center; gap: 2px; padding: 22px 16px; border-radius: 18px; background: var(--color-card); border: 1px solid var(--color-border); text-align: center; }
+.ropa-visits-hero span { color: var(--color-text-muted); font-weight: 600; }
+.ropa-visits-hero b { font-size: 3.2rem; line-height: 1.05; color: var(--color-accent-dark); }
+.ropa-visits-hero small { color: var(--color-text-muted); }
+.ropa-visits-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.ropa-visits-cards > div { display: grid; gap: 4px; padding: 14px; border-radius: 14px; background: var(--color-card); border: 1px solid var(--color-border); min-width: 0; }
+.ropa-visits-cards span { font-size: 0.85rem; color: var(--color-text-muted); }
+.ropa-visits-cards b { font-size: 1.6rem; color: var(--color-text); }
+.ropa-visits-block { display: grid; gap: 10px; padding: 16px; border-radius: 16px; background: var(--color-card); border: 1px solid var(--color-border); }
+.ropa-visits-block h3 { margin: 0; font-size: 1rem; }
+.ropa-visits-bars { display: flex; align-items: flex-end; gap: 6px; height: 150px; overflow-x: auto; }
+.ropa-visits-bar { flex: 1 0 28px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+.ropa-visits-bar i { width: 70%; border-radius: 6px 6px 2px 2px; background: var(--color-accent); }
+.ropa-visits-bar b { font-size: 0.8rem; color: var(--color-text); }
+.ropa-visits-bar span { font-size: 0.75rem; color: var(--color-text-muted); }
+.ropa-visits-top { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: top; }
+.ropa-visits-top li { display: grid; grid-template-columns: minmax(0, 1fr) 40px; grid-template-areas: "name num" "bar bar"; gap: 4px 8px; align-items: center; }
+.ropa-visits-top li span { grid-area: name; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.ropa-visits-top li b { grid-area: num; text-align: right; color: var(--color-accent-dark); }
+.ropa-visits-top li i { grid-area: bar; height: 6px; border-radius: 999px; background: var(--color-accent); opacity: 0.6; }
+.ropa-visits-empty, .ropa-visits-note { margin: 0; color: var(--color-text-muted); font-size: 0.85rem; }
+@media (max-width: 560px) {
+  .ropa-visits-cards { grid-template-columns: 1fr; }
+  .ropa-visits-hero b { font-size: 2.6rem; }
+}

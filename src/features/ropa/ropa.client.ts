@@ -321,3 +321,19 @@ export async function deleteCategory(token: string, id: number) {
   const response = await fetch(buildUrl(`/ropa/categories/${id}`), { method: "DELETE", headers: authHeaders(token) });
   await readJson<{ ok: boolean }>(response);
 }
+
+// Visitas de la tienda para el admin (21/11/2026): solo totales, ya calculados en el servidor.
+export type VisitsSummary = {
+  days: number;
+  people: number;
+  views: number;
+  carts: number;
+  whatsapp: number;
+  byDay: { day: string; people: number }[];
+  topProducts: { label: string; views: number }[];
+};
+
+export async function getVisits(token: string, days: number) {
+  const response = await fetch(buildUrl("/ropa/admin/visits?days=" + days), { headers: authHeaders(token) });
+  return readJson<VisitsSummary>(response);
+}

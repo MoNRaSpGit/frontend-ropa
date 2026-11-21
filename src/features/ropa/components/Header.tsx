@@ -11,12 +11,13 @@ type HeaderProps = {
   cartCount: number;
   selectedGenre: RopaGenreKey | null;
   onSelectGenre: (genre: RopaGenreKey | null) => void;
-  activeView: "catalogo" | "productos" | "carrusel" | "clientes" | "codigo" | "categorias";
+  activeView: "catalogo" | "productos" | "carrusel" | "clientes" | "codigo" | "categorias" | "visitas";
   onInicio: () => void;
   onProductos: () => void;
   onCarrusel: () => void;
   onClientes: () => void;
   onCodigo: () => void;
+  onVisitas: () => void;
   onCategorias: () => void;
   onIngresar: () => void;
   onSalir: () => void;
@@ -37,6 +38,7 @@ export function Header({
   onCarrusel,
   onClientes,
   onCodigo,
+  onVisitas,
   onCategorias,
   onIngresar,
   onSalir,
@@ -134,6 +136,16 @@ export function Header({
             onClick={onCodigo}
           >
             Código
+          </button>
+        ) : null}
+
+        {isAdmin ? (
+          <button
+            type="button"
+            className={activeView === "visitas" ? "ropa-nav-link is-active" : "ropa-nav-link"}
+            onClick={onVisitas}
+          >
+            Visitas
           </button>
         ) : null}
 
@@ -250,6 +262,9 @@ export function Header({
                       </button>
                       <button type="button" role="menuitem" className={activeView === "codigo" ? "ropa-user-item is-active" : "ropa-user-item"} onClick={() => runAndClose(onCodigo)}>
                         Código
+                      </button>
+                      <button type="button" role="menuitem" className={activeView === "visitas" ? "ropa-user-item is-active" : "ropa-user-item"} onClick={() => runAndClose(onVisitas)}>
+                        Visitas
                       </button>
                       <button type="button" role="menuitem" className={activeView === "categorias" ? "ropa-user-item is-active" : "ropa-user-item"} onClick={() => runAndClose(onCategorias)}>
                         Categorías
