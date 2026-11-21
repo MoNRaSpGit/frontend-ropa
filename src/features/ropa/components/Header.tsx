@@ -79,11 +79,12 @@ export function Header({
           para entrar, se aprieta el logo del cliente. Solo tiene sentido
           cuando no hay sesion -- si ya estas logueado, el logo no hace
           nada (para eso esta "Salir"). */}
+      {/* 21/11/2026: logo de la clienta (Armii · Creaciones Alexa) en vez de "Mi Tienda". */}
       {session ? (
-        <span className="ropa-brand-text">Mi Tienda</span>
+        <img className="ropa-brand-logo ropa-brand-logo--round" src={import.meta.env.BASE_URL + "armii-logo.jpeg"} alt="Armii · Creaciones Alexa" />
       ) : (
         <button type="button" className="ropa-brand-logo-button" onClick={onIngresar} aria-label="Ingresar">
-          <span className="ropa-brand-text">Mi Tienda</span>
+          <img className="ropa-brand-logo ropa-brand-logo--round" src={import.meta.env.BASE_URL + "armii-logo.jpeg"} alt="Armii · Creaciones Alexa" />
         </button>
       )}
 

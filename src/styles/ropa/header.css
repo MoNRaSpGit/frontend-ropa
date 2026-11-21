@@ -379,3 +379,12 @@
     display: none;
   }
 }
+
+/* Logo de la clienta (21/11/2026): redondo para que no se vean las esquinas de la imagen. */
+.ropa-brand-logo--round {
+  height: 58px;
+  width: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(168, 69, 111, 0.18);
+}
