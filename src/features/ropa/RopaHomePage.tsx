@@ -20,6 +20,7 @@ import { AdminVisitsPage } from "./components/AdminVisitsPage";
 import { AdminProductsPage } from "./components/AdminProductsPage";
 import { AuthModal } from "./components/AuthModal";
 import { Carousel, type CarouselSlide } from "./components/Carousel";
+import { CategoryCards } from "./components/CategoryCards";
 
 const SAMPLE_CARD_GRADIENTS = [
   "linear-gradient(160deg, #ffd1e1, #f7a8c4)",
@@ -165,6 +166,28 @@ export function RopaHomePage() {
           (selectedSub === null || getSubcategoryForCategory(product.category) === selectedSub)
       )
     : products;
+
+  // Portada = tarjetas de categoria. Con una categoria elegida o buscando
+  // algo, se ven los productos.
+  const showCategories = selectedGenre === null && !query.trim();
+
+  // El boton "atras" del celular vuelve de la categoria a la portada.
+  const catalogRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const handlePop = (event: PopStateEvent) => {
+      const state = event.state as { ropaCategoria?: string } | null;
+      setSelectedGenre(state?.ropaCategoria ?? null);
+    };
+    window.addEventListener("popstate", handlePop);
+    return () => window.removeEventListener("popstate", handlePop);
+  }, []);
+  useEffect(() => {
+    const current = (window.history.state as { ropaCategoria?: string } | null)?.ropaCategoria ?? null;
+    if (selectedGenre === current) return;
+    if (selectedGenre) window.history.pushState({ ropaCategoria: selectedGenre }, "");
+    else window.history.replaceState(null, "");
+    if (selectedGenre) catalogRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [selectedGenre]);
 
   async function refresh(search?: string) {
     setIsLoading(true);
@@ -447,30 +470,18 @@ export function RopaHomePage() {
               </button>
             </form>
 
-            {/* Pedido de un cliente (30/10/2026): las categorias tambien a
-                la vista, en una fila prolija abajo del buscador (el
-                desplegable "Categorías" del header queda igual). */}
-            <div className="ropa-genre-row" role="group" aria-label="Filtrar por categoría">
-              <button
-                type="button"
-                className={selectedGenre === null ? "ropa-chip is-active" : "ropa-chip"}
-                onClick={() => setSelectedGenre(null)}
-              >
-                Todos
-              </button>
-              {ropaGenres.map((genre) => (
-                <button
-                  type="button"
-                  key={genre.key}
-                  className={selectedGenre === genre.key ? "ropa-chip is-active" : "ropa-chip"}
-                  onClick={() => setSelectedGenre(genre.key)}
-                >
-                  {genre.label}
+            {/* 26/11/2026: la fila de categorias se reemplazo por las tarjetas
+                de la portada; adentro de una categoria queda "volver". */}
+            {selectedGenre ? (
+              <div className="ropa-cat-head">
+                <button type="button" className="ropa-chip" onClick={() => setSelectedGenre(null)}>
+                  ← Categorías
                 </button>
-              ))}
-            </div>
+                {selectedGenreInfo ? <h2 className="ropa-cat-title">{selectedGenreInfo.label}</h2> : null}
+              </div>
+            ) : null}
 
-            {selectedGenreInfo ? (
+            {selectedGenreInfo && selectedGenreInfo.subcategories.length > 0 ? (
               <div className="ropa-genre-row ropa-genre-row--sub" role="group" aria-label={`Subcategorías de ${selectedGenreInfo.label}`}>
                 <button
                   type="button"
@@ -493,7 +504,7 @@ export function RopaHomePage() {
             ) : null}
           </div>
 
-          <main className="ropa-main">
+          <main className="ropa-main" ref={catalogRef}>
             {/* (16/11/2026) El error tecnico ("Cannot GET ...") lo ve SOLO el
                 admin (y queda en la consola); el cliente ve un mensaje amable. */}
             {error ? (
@@ -534,11 +545,15 @@ export function RopaHomePage() {
               </div>
             ) : null}
 
-            <div className="ropa-grid">
-              {visibleProducts.map((product) => (
-                <ProductCard key={product.id} product={product} onClick={handleOpenProduct} />
-              ))}
-            </div>
+            {showCategories ? (
+              !isLoading ? <CategoryCards genres={ropaGenres} products={products} onSelect={setSelectedGenre} /> : null
+            ) : (
+              <div className="ropa-grid">
+                {visibleProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} onClick={handleOpenProduct} />
+                ))}
+              </div>
+            )}
           </main>
         </>
       )}
