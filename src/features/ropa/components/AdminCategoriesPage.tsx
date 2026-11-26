@@ -1,17 +1,21 @@
 import { useState, type FormEvent } from "react";
 import { toast } from "react-toastify";
-import { createCategory, deleteCategory, listCategories, moveCategory, renameCategory } from "../ropa.client";
+import { createCategory, deleteCategory, getProductImageSrc, listCategories, moveCategory, removeCategoryImage, renameCategory, setCategoryImage } from "../ropa.client";
+import { resizeImageFile } from "../ropa.imageResize";
+import type { RopaProduct } from "../ropa.types";
+import { pickCoverProduct } from "./CategoryCards";
 import { setRopaGenres, useRopaGenres } from "../ropa.genres";
 
 type AdminCategoriesPageProps = {
   token: string;
+  products: RopaProduct[];
 };
 
 // Pestaña "Categorías" (16/11/2026, pedido explicito): el administrador agrega,
 // renombra, ordena y borra categorias y subcategorias, para armarlas a medida.
 // Renombrar cambia solo el nombre que se ve: los productos ya cargados siguen
 // en su categoria. Borrar una que todavia tiene productos no se deja.
-export function AdminCategoriesPage({ token }: AdminCategoriesPageProps) {
+export function AdminCategoriesPage({ token, products }: AdminCategoriesPageProps) {
   const genres = useRopaGenres();
   const [newLabel, setNewLabel] = useState("");
   const [newSubLabels, setNewSubLabels] = useState<Record<number, string>>({});
@@ -58,6 +62,48 @@ export function AdminCategoriesPage({ token }: AdminCategoriesPageProps) {
       setNewSubLabels((current) => ({ ...current, [parentId]: "" }));
       setOpenSubId(null);
     }, "Subcategoría agregada.");
+  }
+
+  function handlePickImage(id: number, file: File | undefined) {
+    if (!file) return;
+    void run(async () => {
+      await setCategoryImage(token, id, await resizeImageFile(file));
+    }, "Foto de la portada actualizada.");
+  }
+
+  // Foto de la tarjeta que se ve en la portada de la tienda.
+  function renderCover(id: number, key: string, imageUrl: string | null | undefined) {
+    const { cover } = pickCoverProduct(key, products);
+    const preview = imageUrl || (cover ? getProductImageSrc(cover) : null);
+    return (
+      <div className="ropa-cover">
+        <span className="ropa-cover-thumb">{preview ? <img src={preview} alt="" /> : null}</span>
+        <span className="ropa-cover-text">
+          <strong>Foto de la portada</strong>
+          <small>{imageUrl ? "Foto elegida por vos" : preview ? "Automática (de un producto)" : "Todavía sin foto"}</small>
+        </span>
+        <span className="ropa-cover-actions">
+          <label className={busy ? "ropa-button ropa-button--primary is-disabled" : "ropa-button ropa-button--primary"}>
+            {imageUrl ? "Cambiar foto" : "Elegir foto"}
+            <input
+              type="file"
+              accept="image/*"
+              disabled={busy}
+              hidden
+              onChange={(event) => {
+                handlePickImage(id, event.target.files?.[0]);
+                event.target.value = "";
+              }}
+            />
+          </label>
+          {imageUrl ? (
+            <button type="button" className="ropa-button ropa-button--ghost" disabled={busy} onClick={() => void run(() => removeCategoryImage(token, id), "Foto quitada.")}>
+              Quitar
+            </button>
+          ) : null}
+        </span>
+      </div>
+    );
   }
 
   function startEdit(id: number | undefined, label: string) {
@@ -179,6 +225,7 @@ export function AdminCategoriesPage({ token }: AdminCategoriesPageProps) {
         {genres.map((genre, index) => (
           <section className="ropa-cat-group" key={genre.key}>
             {renderRow(genre.id, genre.label, index === 0, index === genres.length - 1)}
+            {genre.id !== undefined ? renderCover(genre.id, genre.key, genre.imageUrl) : null}
             {genre.subcategories.map((sub, subIndex) =>
               renderRow(sub.id, sub.label, subIndex === 0, subIndex === genre.subcategories.length - 1, "sub")
             )}

@@ -322,6 +322,21 @@ export async function deleteCategory(token: string, id: number) {
   await readJson<{ ok: boolean }>(response);
 }
 
+// Foto de la tarjeta de portada de una categoria.
+export async function setCategoryImage(token: string, id: number, dataUri: string) {
+  const response = await fetch(buildUrl(`/ropa/categories/${id}/image`), {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...authHeaders(token) },
+    body: JSON.stringify({ dataUri })
+  });
+  await readJson<{ ok: boolean }>(response);
+}
+
+export async function removeCategoryImage(token: string, id: number) {
+  const response = await fetch(buildUrl(`/ropa/categories/${id}/image`), { method: "DELETE", headers: authHeaders(token) });
+  await readJson<{ ok: boolean }>(response);
+}
+
 // Visitas de la tienda para el admin (21/11/2026): solo totales, ya calculados en el servidor.
 export type VisitsSummary = {
   days: number;

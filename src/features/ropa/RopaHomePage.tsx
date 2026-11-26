@@ -429,7 +429,7 @@ export function RopaHomePage() {
           onEliminar={(client) => void handleEliminarCliente(client)}
         />
       ) : view === "categorias" && isAdmin && session ? (
-        <AdminCategoriesPage token={session.token} />
+        <AdminCategoriesPage token={session.token} products={products} />
       ) : view === "visitas" && isAdmin && session ? (
         <AdminVisitsPage token={session.token} />
       ) : view === "codigo" && isAdmin && session ? (

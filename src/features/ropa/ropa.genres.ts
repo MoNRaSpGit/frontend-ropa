@@ -7,7 +7,7 @@ import { useSyncExternalStore } from "react";
 export type RopaGenreKey = string;
 
 export type RopaSubcategory = { id?: number; key: string; label: string };
-export type RopaGenre = { id?: number; key: RopaGenreKey; label: string; subcategories: RopaSubcategory[] };
+export type RopaGenre = { id?: number; key: RopaGenreKey; label: string; imageUrl?: string | null; subcategories: RopaSubcategory[] };
 
 // Lista que se usa mientras el servidor no responde (y de punto de partida):
 // desde el 16/11/2026 la lista REAL la edita el administrador y se carga del
