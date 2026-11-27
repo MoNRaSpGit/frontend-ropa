@@ -41,8 +41,3 @@
   color: #25d366;
   flex-shrink: 0;
 }
-
-.ropa-footer-credit span:last-child {
-  font-weight: 700;
-  color: var(--color-text);
-}
